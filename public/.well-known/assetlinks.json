@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.excampur.estes.lite",
+      "sha256_cert_fingerprints": [
+        "8C:0A:55:7B:79:A3:99:8A:2C:76:64:95:77:1E:53:1A:A2:4D:D9:B5:84:51:8B:CF:87:38:02:86:AD:47:7C:0B"
+      ]
+    }
+  }
+]
