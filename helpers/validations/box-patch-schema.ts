@@ -13,7 +13,8 @@ export const boxPatchSchema = z.object({
   attachments: z
     .array(
       z.object({
-        url: z.string().max(128).url()
+        url: z.string().max(128).url(),
+        fileName: z.string().max(128).optional()
       })
     )
     .optional(),

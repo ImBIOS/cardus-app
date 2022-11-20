@@ -1,37 +1,14 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useMemo } from "react";
+import { Fragment } from "react";
+import Hamburger from "./hamburger";
 
-const Hamburger = () => {
-  const genericHamburgerLine = useMemo(
-    () =>
-      "h-1 w-8 my-1 rounded-full bg-black transition ease transform duration-300 bg-neutral-200",
-    []
-  );
-
+const TopLeft = () => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       {({ open }) => (
         <>
           <Menu.Button className="group flex h-12 w-12 flex-col items-center justify-center rounded">
-            <div
-              className={`${genericHamburgerLine} ${
-                open
-                  ? "translate-y-3 rotate-45 group-hover:opacity-100"
-                  : "group-hover:opacity-100"
-              }`}
-            />
-            <div
-              className={`${genericHamburgerLine} ${
-                open ? "opacity-0" : "group-hover:opacity-100"
-              }`}
-            />
-            <div
-              className={`${genericHamburgerLine} ${
-                open
-                  ? "-translate-y-3 -rotate-45 group-hover:opacity-100"
-                  : "group-hover:opacity-100"
-              }`}
-            />
+            <Hamburger open={open} />
           </Menu.Button>
           <Transition
             as={Fragment}
@@ -93,4 +70,4 @@ const Hamburger = () => {
   );
 };
 
-export default Hamburger;
+export default TopLeft;

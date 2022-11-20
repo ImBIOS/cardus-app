@@ -1,7 +1,7 @@
 import PromptScreen from "components/screen/prompt/prompt-screen";
 import BottomNav from "components/ui/nav/bottom-nav";
 import TopNav from "components/ui/nav/top-nav";
-import { isMobileAtom } from "configs/atoms";
+import { isLoadingAtom, isMobileAtom } from "configs/atoms";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
@@ -9,12 +9,12 @@ import { ReactNode, useEffect } from "react";
 
 type Props = {
   children?: ReactNode;
-  hideBottomNav?: boolean;
 };
 
-const MobileLayout = ({ children, hideBottomNav }: Props): JSX.Element => {
+const MobileLayout = ({ children }: Props): JSX.Element => {
   const { status } = useSession({ required: true });
   const [isMobile, setIsMobile] = useAtom(isMobileAtom);
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
 
   useEffect(() => {
     setIsMobile(
@@ -23,7 +23,9 @@ const MobileLayout = ({ children, hideBottomNav }: Props): JSX.Element => {
     );
   }, [setIsMobile]);
 
-  if (status === "loading") return <PromptScreen type="loading" />;
+  useEffect(() => setIsLoading(status === "loading"), [setIsLoading, status]);
+
+  if (isLoading) return <PromptScreen type="loading" />;
   if (!isMobile) return <PromptScreen type="notMobile" />;
 
   return (
@@ -32,8 +34,8 @@ const MobileLayout = ({ children, hideBottomNav }: Props): JSX.Element => {
         <title>Cardus</title>
       </Head>
       <TopNav />
-      <main className="mx-4 my-2">{children}</main>
-      <BottomNav hide={hideBottomNav} />
+      <main className="mx-4 mt-2 mb-48">{children}</main>
+      <BottomNav />
     </>
   );
 };

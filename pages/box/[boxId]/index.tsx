@@ -1,8 +1,9 @@
 import MobileLayout from "components/layout/mobile-layout";
 import PromptScreen from "components/screen/prompt/prompt-screen";
-import ImageSkeleton from "components/ui/image-skeleton";
+import AttachmentElement from "components/ui/attachment/attachment-element";
+import { boxIdAtom, isPrintAtom } from "configs/atoms";
+import { useAtom } from "jotai";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import QRCode from "qrcode";
 import { useEffect, useRef, useState } from "react";
@@ -10,22 +11,18 @@ import useSWR from "swr";
 
 const Storage: React.FC = () => {
   const router = useRouter();
+  const [isPrint] = useAtom(isPrintAtom);
+  const [_, setBoxIdState] = useAtom(boxIdAtom);
+
   const [qr, setQR] = useState("");
-  const [isPrint, setIsPrint] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState<boolean[]>([]);
 
   const { boxId } = router.query as unknown as any;
   const ref: any = useRef();
 
-  const generatePDF = () => {
-    setIsPrint(true);
-    // Wait for re-render to finish
-    const print = setInterval(() => {
-      window?.print();
-      setIsPrint(false);
-      clearInterval(print);
-    }, 1);
-  };
+  // Set global boxId state
+  useEffect(() => {
+    setBoxIdState(boxId);
+  }, [boxId, setBoxIdState]);
 
   useEffect(() => {
     if (boxId) {
@@ -38,25 +35,7 @@ const Storage: React.FC = () => {
           console.error(err);
         });
     }
-  });
-
-  const deleteData = async (data: { id: string; attachments: any }) => {
-    try {
-      const res = await fetch(`/api/box/${data.id}`, {
-        method: "DELETE",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      });
-      const record = await res.json();
-      return record.id;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    setImageLoaded((prev) => [...prev, false]);
-  }, []);
+  }, [boxId, router.asPath, router.basePath]);
 
   const fetcher = (url: RequestInfo) => fetch(url).then((r) => r.json());
   const { data, error } = useSWR(boxId ? `/api/box/${boxId}` : null, fetcher);
@@ -67,7 +46,7 @@ const Storage: React.FC = () => {
   const box = data.res;
   return (
     <MobileLayout>
-      <section className="mx-auto mt-8 mb-0 flex w-[90%] max-w-4xl flex-col lg:mt-32">
+      <section className="mx-auto mt-8 mb-0 flex w-[90%] max-w-4xl flex-col">
         <header className="mb-4 flex">
           {/* QR */}
           {qr && (
@@ -83,7 +62,7 @@ const Storage: React.FC = () => {
           )}
           <div>
             <input
-              className="w-full cursor-default border-0 bg-transparent text-4xl  font-semibold leading-3 outline-none lg:text-6xl"
+              className="w-full cursor-default border-0 bg-transparent text-4xl  font-semibold leading-3 outline-none"
               type="text"
               name="name"
               autoComplete="off"
@@ -113,64 +92,13 @@ const Storage: React.FC = () => {
               defaultValue={item.name}
               placeholder="Item Name"
               readOnly
-              className="bg-transparent py-4 px-0 text-lg outline-none lg:text-2xl"
+              className="bg-transparent py-4 px-0 text-lg outline-none"
             />
           )
         )}
 
         <div className="relative flex h-40 items-center justify-start overflow-x-auto overflow-y-clip bg-transparent">
-          {box.attachments.map(({ url }: { url: string }, idx: number) => (
-            <div key={url} className="relative mx-1 h-40 w-28">
-              {!imageLoaded[idx] && <ImageSkeleton />}
-              <Image
-                fill
-                sizes="100%"
-                src={url}
-                onLoad={() => setImageLoaded([...imageLoaded])}
-                alt=""
-                className="rounded-lg object-cover hover:cursor-pointer"
-              />
-            </div>
-          ))}
-        </div>
-        <div className={`mt-4 ${isPrint && "hidden"}`}>
-          <Link href={`/box/${boxId}/edit`} passHref>
-            <button
-              className="cursor-pointer rounded-md border-0 bg-transparent py-3 px-2 text-lg font-semibold"
-              type="button"
-            >
-              Edit Note
-            </button>
-          </Link>
-          <Link href="/" passHref>
-            <button
-              className="ml-4 cursor-pointer rounded-md border-0 bg-transparent py-3 px-2 text-lg font-semibold text-red-500"
-              type="button"
-            >
-              Back
-            </button>
-          </Link>
-          <button
-            className="ml-4 cursor-pointer rounded-md border-0 bg-transparent py-3 px-2 text-lg font-semibold text-red-500"
-            type="button"
-            onClick={() =>
-              deleteData({ id: boxId, attachments: box.attachments }).then(
-                () => {
-                  router.replace(`/`);
-                }
-              )
-            }
-          >
-            Delete
-          </button>
-          <button
-            className="ml-4 cursor-pointer rounded-md border-0 bg-transparent py-3 px-2 text-lg font-semibold text-yellow-500"
-            type="button"
-            onClick={generatePDF}
-          >
-            Print
-          </button>
-          {/* <GeneratePDF html={ref} /> */}
+          <AttachmentElement box={box} readOnly />
         </div>
       </section>
     </MobileLayout>

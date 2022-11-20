@@ -8,6 +8,7 @@
   ],
   "plugins": ["cypress", "prettier", "react-hooks"],
   "rules": {
-    "no-console": ["warn", { "allow": ["info", "warn", "error"] }]
+    "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
+    "no-alert": "warn"
   }
 }

@@ -10,6 +10,24 @@ type Props = {
   onCancel: () => void;
 };
 
+/**
+ * Modal component
+ * @example
+ * const [isOpen, setIsOpen] = useState(false);
+ *
+ * const openModal = () => setIsOpen(true);
+ * const onCancel = () => setIsOpen(false);
+ * const onAccept = () => signOut();
+ *
+ * <Modal
+ * isOpen={isOpen}
+ * title="Sign Out"
+ * description="Are you sure you want to sign out?"
+ * acceptText="Sign Out"
+ * onCancel={onCancel}
+ * onAccept={onAccept}
+ * />
+ */
 const Modal = ({
   isOpen,
   title,
@@ -44,7 +62,7 @@ const Modal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-800">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl border border-gray-800 bg-white bg-opacity-30 p-6 text-left align-middle shadow-xl backdrop-blur-lg backdrop-filter transition-all dark:bg-neutral-800 dark:bg-opacity-30">
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200"

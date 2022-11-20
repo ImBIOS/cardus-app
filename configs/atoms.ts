@@ -2,28 +2,32 @@ import { atom } from "jotai";
 
 export type IAttachment = {
   fileName?: string;
-  url?: string;
+  url: string;
 };
 
-interface IAttachmentAtom {
+export interface IAttachmentAtom {
   progress?: number;
-  url?: string;
   status?: string;
-  preview?: IAttachment;
+  metadata?: IAttachment;
   [key: string]: string | number | IAttachment | undefined;
 }
 
-export const bottomNavAtom = atom({
-  currentScreen: "home"
+export type MidButtonAction = "edit" | "attachment" | "";
+
+interface IBottomNavAtom {
+  currentScreen: string;
+  midButtonAction: MidButtonAction;
+  [key: string]: string;
+}
+
+export const bottomNavAtom = atom<IBottomNavAtom>({
+  currentScreen: "home",
+  midButtonAction: ""
 });
 
 export const topNavAtom = atom({
   submitAction: () => {}
 });
-
-// const searchAtom = atom({
-//   query: ""
-// });
 
 export const midBottomNavAtom = atom({
   animation: "",
@@ -34,8 +38,10 @@ export const midBottomNavAtom = atom({
 
 export const attachmentAtom = atom(new Map<number, IAttachmentAtom>());
 
+export const isLoadingAtom = atom(true);
+export const isHideCreateBoxAtom = atom(true);
 export const isWaitingUploadAtom = atom(false);
-
-// export const attachmentAtom = atom<IAttachmentAtom[]>([]);
-
 export const isMobileAtom = atom(false);
+export const isPrintAtom = atom(false);
+
+export const boxIdAtom = atom("");

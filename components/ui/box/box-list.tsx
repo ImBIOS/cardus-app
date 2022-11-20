@@ -8,7 +8,7 @@ const BoxList: React.FC = () => {
 
   if (error || !data || data?.res?.length === 0)
     return (
-      <section className="-mt-24 flex h-screen flex-col items-center justify-center text-center">
+      <section className="flex h-screen flex-col items-center justify-center text-center">
         {error && <>🥹 failed to load</>}
         {!data && <>📦 Loading boxes...</>}
         {data?.res?.length === 0 && (
@@ -33,7 +33,7 @@ const BoxList: React.FC = () => {
     );
 
   return (
-    <section className="no-scrollbar mb-36 flex flex-row flex-wrap gap-2 overflow-y-auto">
+    <section className="no-scrollbar mb-36 flex flex-row flex-wrap gap-2 overflow-y-clip">
       {data.res.map((itemData: any, idx: number) => (
         <BoxItem key={`storageItem-${idx}`} itemData={itemData} />
       ))}

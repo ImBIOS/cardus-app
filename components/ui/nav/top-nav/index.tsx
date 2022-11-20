@@ -1,37 +1,49 @@
 import { CheckIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
-import { bottomNavAtom, isWaitingUploadAtom, topNavAtom } from "configs/atoms";
+import {
+  bottomNavAtom,
+  isPrintAtom,
+  isWaitingUploadAtom,
+  topNavAtom
+} from "configs/atoms";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
-import Hamburger from "./hamburger";
+import TopLeft from "./top-left";
 
 const TopNav = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  const [isPrint] = useAtom(isPrintAtom);
+  const [isWaiting] = useAtom(isWaitingUploadAtom);
   const [{ currentScreen }] = useAtom(bottomNavAtom);
   const [{ submitAction }] = useAtom(topNavAtom);
-  const [isWaiting] = useAtom(isWaitingUploadAtom);
 
   const isBoxScreen = useMemo(
     () => currentScreen.includes("box"),
     [currentScreen]
   );
+
   const isFormScreen = useMemo(
     () => ["add box", "edit box"].includes(currentScreen),
     [currentScreen]
   );
 
   return (
-    <section className="sticky top-0 z-10 flex justify-between bg-white px-4 pt-6 pb-2 dark:bg-neutral-900">
+    <section
+      className={`sticky top-0 z-10 flex justify-between border-b border-gray-800 bg-neutral-900 bg-opacity-30 p-4 pt-6 backdrop-blur-lg backdrop-filter ${
+        isPrint && "hidden"
+      }`}
+    >
       <div className="flex items-center justify-start">
         {/* <!-- Hamburger --> */}
-        {currentScreen === "home" && <Hamburger />}
+        {currentScreen === "home" && <TopLeft />}
+
         {/* <!-- Back Button --> */}
         {isBoxScreen && (
           <ChevronLeftIcon
             className="h-10 w-10"
-            onClick={() => router.back()}
+            onClick={() => router.push("/")}
           />
         )}
         <h1 className="ml-4 text-3xl font-bold capitalize">
@@ -39,6 +51,7 @@ const TopNav = () => {
         </h1>
       </div>
 
+      {/* <!-- Submit Button --> */}
       {isFormScreen && (
         <button
           onClick={submitAction}

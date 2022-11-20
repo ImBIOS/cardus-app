@@ -1,63 +1,79 @@
+import { MinusIcon } from "@heroicons/react/24/solid";
+import { zodResolver } from "@hookform/resolvers/zod";
 import MobileLayout from "components/layout/mobile-layout";
 import AttachmentElement from "components/ui/attachment/attachment-element";
+import InputField from "components/ui/form/input-field";
 import { attachmentAtom, IAttachment, topNavAtom } from "configs/atoms";
+import { boxPatchSchema } from "helpers/validations/box-patch-schema";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface IItems {
   name: string;
 }
 
+type FormData = z.infer<typeof boxPatchSchema>;
+
 const AddStorage = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [_, setTopNav] = useAtom(topNavAtom);
-  const [attachmentState] = useAtom(attachmentAtom);
+  const [attachmentState, setAttachmentState] = useAtom(attachmentAtom);
 
-  // Ref to the input item element
-  const inputItemRef = useRef<HTMLInputElement[]>([]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    getValues,
+    control,
+    reset,
+    trigger,
+    setError
+  } = useForm<FormData>({
+    resolver: zodResolver(boxPatchSchema),
+    defaultValues: {
+      items: [{ name: "" }]
+    }
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "items"
+  });
 
-  const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
-  const [items, setItems] = useState<IItems[]>([{ name: "" }]);
-  // const [attachments, setAttachments] = useState<IAttachment[]>([]);
+  // Clear the attachmentState when the component mounts
+  useEffect(() => {
+    setAttachmentState(new Map());
+  }, [setAttachmentState]);
 
-  // useEffect(() => {
-  //   let arrayOfURL = [];
-  //   for (const value of attachmentState.values()) {
-  //     arrayOfURL.push(value.url);
-  //   }
+  // Log error
+  useEffect(() => {
+    console.error(errors);
+  }, [errors]);
 
-  //   setAttachments(arrayOfURL);
-  // }, [attachmentState, box?.attachments, editPage]);
-
-  // Auto add new item
-  // useEffect(() => {
-  //   // add new items when the last item is not empty
-  //   if (items && items.length > 0 && items[items.length - 1].name !== "") {
-  //     setValue("items", [...items, { name: "" }]);
-  //   }
-  // }, [items]);
-
-  // Set top nav submit button action
+  // Set top nav action
   useEffect(() => {
     // Get url and fileName from attachmentState
     const attachments: IAttachment[] = [];
     for (const value of attachmentState.values()) {
       attachments.push({
-        url: value.url,
-        fileName: value.fileName as string
+        url: value?.metadata?.url as string,
+        fileName: value.metadata?.fileName as string
       });
     }
 
-    const submitBox = async () => {
+    const submitBox = async (values: FormData) => {
+      // Clean items from empty values
+      const items = values.items?.filter((item) => item.name !== "");
+
       const data = {
-        name,
+        ...values,
         items,
         attachments,
-        location,
         email: session?.user?.email
       };
 
@@ -71,64 +87,65 @@ const AddStorage = () => {
       router.replace(`/box/${record.id}`);
     };
 
-    setTopNav({ submitAction: submitBox });
-  }, [
-    items,
-    router,
-    session?.user?.email,
-    setTopNav,
-    name,
-    attachmentState,
-    location
-  ]);
+    setTopNav({ submitAction: () => submitBox(getValues()) });
+  }, [attachmentState, getValues, router, session?.user?.email, setTopNav]);
 
-  // add new items when the last item is not empty
-  // useEffect(() => {
-  //   if (items.length > 0 && items[items.length - 1].name !== "") {
-  //     setItems([...items, { name: "" }]);
-  //   }
-  // }, [items]);
+  const handleOnItemInputKeyDown = (idx: number) => {
+    const items = getValues("items");
+    // if items is defined
+    if (items) {
+      const isLastItem = idx === items.length - 1;
+      const isFilled = items[idx].name !== "";
+
+      // When last item is filled than add new item
+      if (isLastItem && isFilled) append({ name: "" }, { shouldFocus: false });
+    }
+  };
 
   return (
     <MobileLayout>
-      <section className="mx-auto mt-8 mb-0 flex w-[90%] max-w-4xl flex-col lg:mt-32">
+      <section className="mx-auto mt-8 mb-0 flex w-[90%] max-w-4xl flex-col">
         <header className="mb-4 flex">
           <div>
-            <input
-              className="w-full border-0 bg-transparent text-4xl font-semibold leading-3 outline-none lg:text-6xl"
-              type="text"
-              name="box name"
-              autoComplete="off"
+            <InputField
+              register={register}
+              id="name"
+              flavour="title"
               placeholder="Box Name"
-              defaultValue=""
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              className="mt-2 w-full border-0 bg-transparent px-0 py-2 font-light outline-none"
-              placeholder="Box Location"
-              name="place"
-              type="text"
               autoComplete="off"
-              onChange={(e) => setLocation(e.target.value)}
+            />
+            <InputField
+              register={register}
+              id="location"
+              flavour="subtitle"
+              className="mt-2"
+              placeholder="Box Location"
+              autoComplete="off"
             />
           </div>
         </header>
-        {items.map((item, index) => (
-          <input
-            key={`item-${index}`}
-            ref={(el: HTMLInputElement) => (inputItemRef.current[index] = el)}
-            name="items"
-            value={item.name}
-            onChange={(e) =>
-              // update specific item
-              setItems((prev) => {
-                prev[index].name = e.target.value;
-                return [...prev];
-              })
-            }
-            className="bg-transparent py-4 px-0 text-lg outline-none lg:text-2xl"
-            placeholder="Add item"
-          />
+        {fields.map((item, index) => (
+          <div key={item.id} className="flex justify-between">
+            <InputField
+              register={register}
+              id={`items.${index}.name` as const}
+              flavour="body"
+              className="py-4"
+              defaultValue={item.name}
+              autoComplete="off"
+              onFocus={(e) =>
+                (e.target.placeholder = "Type the item name clearly")
+              }
+              onBlur={(e) => (e.target.placeholder = "Tap here to add an item")}
+              onKeyDown={() => handleOnItemInputKeyDown(index)}
+              placeholder="Tap here to add an item"
+            />
+            {fields.length > 1 && (
+              <button onClick={() => remove(index)}>
+                <MinusIcon className="h-5 w-5 rounded-full bg-red-400 text-white" />
+              </button>
+            )}
+          </div>
         ))}
         <AttachmentElement />
       </section>

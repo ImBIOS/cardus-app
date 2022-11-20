@@ -8,6 +8,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const { name, items, attachments, location, email } = req.body;
 
+    console.log(req.body);
+
     const docRef = await addDoc(collection(db, "boxes"), {
       name: name,
       items: items,
