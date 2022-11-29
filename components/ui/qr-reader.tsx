@@ -1,7 +1,7 @@
 import QrScanner from "qr-scanner";
 import { useEffect, useRef } from "react";
 
-type Prop = {} & React.HTMLAttributes<HTMLVideoElement>;
+type Prop = {} & React.HTMLAttributes<HTMLDivElement>;
 
 const QrReader = ({ ...props }: Prop) => {
   const overlayElem = useRef<HTMLDivElement>(null);
@@ -56,8 +56,8 @@ const QrReader = ({ ...props }: Prop) => {
   }, []);
 
   return (
-    <>
-      <video ref={videoElem} {...props} />
+    <div {...props}>
+      <video ref={videoElem} />
       <div ref={overlayElem} className="scan-region-highlight">
         <svg
           ref={overlaySvgElem}
@@ -103,7 +103,7 @@ const QrReader = ({ ...props }: Prop) => {
           }
         `}
       </style>
-    </>
+    </div>
   );
 };
 
