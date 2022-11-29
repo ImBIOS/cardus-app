@@ -2,7 +2,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:tailwind": "concurrently \"next dev --turbo --show-all\" \"yarn run tailwind --watch\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -12,9 +11,7 @@
     "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless",
     "lost-pixel": "lost-pixel",
     "lost-pixel:update": "lost-pixel update",
-    "fmt": "prisma format && prettier --write \"**/*.{js,ts,tsx,md}\"",
-    "tailwind": "tailwindcss -i styles/globals.css -o styles/dist.css",
-    "postinstall": "yarn run tailwind"
+    "fmt": "prisma format && prettier --write \"**/*.{js,ts,tsx,md}\""
   },
   "dependencies": {
     "@google-cloud/storage": "^6.7.0",
@@ -44,7 +41,6 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "autoprefixer": "^10.4.13",
-    "concurrently": "7.6.0",
     "cypress": "^11.0.0",
     "eslint": "^8.27.0",
     "eslint-config-next": "^13.0.2",
