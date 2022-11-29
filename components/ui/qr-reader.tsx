@@ -30,8 +30,8 @@ const QrReader = ({ ...props }: Prop) => {
     };
 
     scanner.start().then(() => {
-      overlayElem.current?.classList.add("scan-region-highlight-custom");
-      overlaySvgElem.current?.classList.add("scan-region-highlight-svg-custom");
+      // overlayElem.current?.classList.add("scan-region-highlight-custom");
+      // overlaySvgElem.current?.classList.add("scan-region-highlight-svg-custom");
       updateFlashAvailability();
       // List cameras after the scanner started to avoid listCamera's stream and the scanner's stream being requested
       // at the same time which can result in listCamera's unconstrained stream also being offered to the scanner.
@@ -68,7 +68,7 @@ const QrReader = ({ ...props }: Prop) => {
           <path d="M31 2H10a8 8 0 0 0-8 8v21M207 2h21a8 8 0 0 1 8 8v21m0 176v21a8 8 0 0 1-8 8h-21m-176 0H10a8 8 0 0 1-8-8v-21"></path>
         </svg>
       </div>
-      <style>
+      {/* <style>
         {`
           .scan-region-highlight-custom {
             position: absolute !important;
@@ -102,7 +102,7 @@ const QrReader = ({ ...props }: Prop) => {
             left: -50vw !important;
           }
         `}
-      </style>
+      </style> */}
     </div>
   );
 };
