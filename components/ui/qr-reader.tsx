@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 type Prop = {} & React.HTMLAttributes<HTMLDivElement>;
 
 const QrReader = ({ ...props }: Prop) => {
-  const overlayElem = useRef<HTMLDivElement>(null);
-  const overlaySvgElem = useRef<SVGSVGElement>(null);
+  // const overlaySvgElem = useRef<SVGSVGElement>(null);
+  // const overlayElem = useRef<HTMLDivElement>(null);
   const videoElem = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -18,10 +18,21 @@ const QrReader = ({ ...props }: Prop) => {
         },
         returnDetailedScanResult: true,
         highlightScanRegion: true,
-        highlightCodeOutline: true,
-        overlay: overlayElem.current as HTMLDivElement
+        highlightCodeOutline: true
+        // overlay: overlayElem.current as HTMLDivElement
       }
     );
+
+    // Background canvas
+    videoElem.current?.parentNode?.insertBefore(
+      scanner.$canvas,
+      videoElem.current
+    );
+    scanner.$canvas.style.position = "absolute";
+    scanner.$canvas.style.width = "100%";
+    scanner.$canvas.style.height = "100%";
+    scanner.$canvas.style.filter = "blur(20px)";
+    scanner.$canvas.style.opacity = "30%";
 
     const updateFlashAvailability = () => {
       scanner?.hasFlash().then((hasFlash) => {
@@ -56,9 +67,9 @@ const QrReader = ({ ...props }: Prop) => {
   }, []);
 
   return (
-    <div {...props}>
+    <div className="flex h-screen items-center justify-center" {...props}>
       <video ref={videoElem} />
-      <div ref={overlayElem} className="scan-region-highlight">
+      {/* <div ref={overlayElem} className="scan-region-highlight">
         <svg
           ref={overlaySvgElem}
           className="scan-region-highlight-svg"
@@ -67,7 +78,7 @@ const QrReader = ({ ...props }: Prop) => {
         >
           <path d="M31 2H10a8 8 0 0 0-8 8v21M207 2h21a8 8 0 0 1 8 8v21m0 176v21a8 8 0 0 1-8 8h-21m-176 0H10a8 8 0 0 1-8-8v-21"></path>
         </svg>
-      </div>
+      </div> */}
       {/* <style>
         {`
           .scan-region-highlight-custom {
@@ -76,30 +87,30 @@ const QrReader = ({ ...props }: Prop) => {
             transform: scaleX(-1) !important;
             width: 50vw !important;
             height: 50vw !important;
-            top: 30% !important;
+            top: 39% !important;
             left: 25% !important;
           }
 
           .scan-region-highlight-custom .scan-region-highlight-svg-custom {
-            position: absolute !important;
-            width: 50vw !important;
-            height: 50vw !important;
-            left: 0 !important;
-            top: 0 !important;
-            fill: none !important;
             stroke: #60a5fa !important;
-            stroke-width: 4 !important;
-            stroke-linecap: round !important;
-            stroke-linejoin: round !important;
+            // position: absolute !important;
+            // width: 50vw !important;
+            // height: 50vw !important;
+            // left: 0 !important;
+            // top: 0 !important;
+            // fill: none !important;
+            // stroke-width: 4 !important;
+            // stroke-linecap: round !important;
+            // stroke-linejoin: round !important;
           }
 
           .scan-region-highlight-custom .code-outline-highlight {
-            position: absolute !important;
-            width: 150vw !important;
-            height: 150vw !important;
             stroke: #3b82f6 !important;
-            top: -30vw !important;
-            left: -50vw !important;
+            // position: absolute !important;
+            // width: 150vw !important;
+            // height: 150vw !important;
+            // top: -30vw !important;
+            // left: -50vw !important;
           }
         `}
       </style> */}
