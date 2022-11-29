@@ -3,7 +3,7 @@ import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
-import "styles/globals.css";
+import "styles/dist.css";
 
 function MyApp({
   Component,

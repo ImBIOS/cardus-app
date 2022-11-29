@@ -4,19 +4,14 @@ import BoxItemImages from "./box-item-images";
 type Props = {
   itemData: {
     id: string;
-    fields: {
-      name: string;
-      location: string;
-      items: any[];
-      attachments: {
-        url: string;
-      }[];
-    };
+    name: string;
+    location: string;
+    images: string[];
   };
 };
 
 const BoxItem = ({ itemData }: Props) => {
-  const { id, fields } = itemData;
+  const { id, name, location, images } = itemData;
   return (
     <Link
       href={`/box/${id}`}
@@ -24,17 +19,17 @@ const BoxItem = ({ itemData }: Props) => {
     >
       <div className="mx-4 my-2 flex items-center">
         <div className="relative mr-4 flex items-center">
-          <BoxItemImages images={fields.attachments} />
+          <BoxItemImages images={images} />
         </div>
         <div>
           <h3 className="overflow-hidden text-ellipsis text-2xl font-bold">
-            {fields.name}
+            {name}
           </h3>
           <p className="mt-2 w-14 overflow-hidden text-ellipsis text-sm">
-            {fields.items.length} item{fields.items.length > 1 ? "s" : ""}
+            {/* {fields.items.length} item{fields.items.length > 1 ? "s" : ""} */}
           </p>
-          <p className="overflow-hidden text-ellipsis text-neutral-400">
-            {fields.location}
+          <p className="w-14 overflow-hidden text-ellipsis text-neutral-400">
+            {location}
           </p>
         </div>
       </div>

@@ -1,13 +1,9 @@
-import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
-import AddAttachment from "components/ui/attachment/add-attcahment";
-import {
-  bottomNavAtom,
-  boxIdAtom,
-  isHideCreateBoxAtom,
-  midBottomNavAtom
-} from "configs/atoms";
+import { PencilSquareIcon, QrCodeIcon } from "@heroicons/react/24/solid";
+import AddImage from "components/ui/image/add-image";
 import { useAtom } from "jotai";
+import { bottomNavAtom, boxIdAtom, midBottomNavAtom } from "lib/atoms";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
 type Props = {
@@ -15,10 +11,10 @@ type Props = {
 };
 
 const MiddleNav = ({ className }: Props) => {
+  const router = useRouter();
   const [boxId] = useAtom(boxIdAtom);
   const [{ currentScreen, midButtonAction }] = useAtom(bottomNavAtom);
   const [midButton, setMidButton] = useAtom(midBottomNavAtom);
-  const [_, setIsHideCreateBox] = useAtom(isHideCreateBoxAtom);
 
   const [isSleepDone, setIsAnimating] = useState(midButton.isAnimating);
   const [midButtonAnimation, setMidButtonAnimation] = useState(
@@ -40,18 +36,17 @@ const MiddleNav = ({ className }: Props) => {
   useEffect(() => {
     const waitAnimation = setInterval(() => {
       const hasMidAction = midButtonAction !== "";
-      const className = hasMidAction
-        ? // Animated state
-          "bg-blue-500 -translate-y-1 scale-110 rotate-180"
-        : // Default state
-          "shadow-xl shadow-blue-500/75 bg-blue-400 translate-y-0 scale-100";
+      const className =
+        hasMidAction || router.asPath === "/scan"
+          ? // Animated state
+            "bg-blue-500 -translate-y-1 scale-110 rotate-180"
+          : // Default state
+            "shadow-xl shadow-blue-500/75 bg-blue-400 translate-y-0 scale-100";
       setMidButton({ ...midButton, animation: className });
       setMidButtonAnimation(className);
       clearInterval(waitAnimation);
     }, 100);
   }, [midButtonAction, midButton, setMidButton]);
-
-  const showCreateBox = () => setIsHideCreateBox(false);
 
   return (
     <div className={`relative -mt-16 hover:cursor-pointer ${className}`}>
@@ -65,16 +60,17 @@ const MiddleNav = ({ className }: Props) => {
               midButtonAnimation.includes("rotate") && "rotate-180"
             }`}
           >
-            {currentScreen === "box" ? <PencilSquareIcon /> : <AddAttachment />}
+            {currentScreen === "box" ? <PencilSquareIcon /> : <AddImage />}
           </div>
         </div>
       ) : (
-        <div
-          className={`h-16 w-16 rounded-full bg-blue-400 p-3 text-white transition-all delay-150 duration-300 ease-in-out ${midButtonAnimation}`}
-          onClick={showCreateBox}
-        >
-          <PlusIcon />
-        </div>
+        <Link href="/scan">
+          <div
+            className={`h-16 w-16 rounded-full bg-blue-400 p-3 text-white transition-all delay-150 duration-300 ease-in-out ${midButtonAnimation}`}
+          >
+            <QrCodeIcon />
+          </div>
+        </Link>
       )}
       {midButtonAction === "edit" && (
         <Link

@@ -30,3 +30,16 @@ This is the Trusted Web Activity for the CardusApp project. It is a webapp that 
 
 1. Build the project with `yarn build`
 2. Start the production server with `yarn start`
+
+### 💻 CORS
+
+#### 🔨 How to Set
+
+1. Edit `cors.json`
+2. Run `gcloud storage buckets update gs://BUCKET_NAME --cors-file="cors.json"`
+
+### 🔍 How to Check
+
+```bash
+gcloud storage buckets describe gs://BUCKET_NAME --format="default(cors)"
+```

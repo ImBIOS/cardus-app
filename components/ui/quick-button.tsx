@@ -1,14 +1,19 @@
 import { PlusIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
+import { useAtom } from "jotai";
+import { isHideCreateBoxAtom } from "lib/atoms";
 
-const QuickButton: React.FC = () => {
+const QuickButton = () => {
+  const [_, setIsHideCreateBox] = useAtom(isHideCreateBoxAtom);
+
+  const handleOnClick = () => setIsHideCreateBox(false);
+
   return (
-    <Link
-      href="/box/add"
-      className="fixed bottom-32 right-8 rounded-full bg-blue-600 p-3 text-white"
+    <button
+      onClick={handleOnClick}
+      className="fixed bottom-32 right-8 rounded-full bg-blue-400 p-3 text-white"
     >
       <PlusIcon className="h-8 w-8 text-white" />
-    </Link>
+    </button>
   );
 };
 

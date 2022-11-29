@@ -4,15 +4,16 @@ import {
   UserCircleIcon
 } from "@heroicons/react/24/solid";
 import Tooltip from "components/ui/tooltip";
-import { bottomNavAtom, isPrintAtom } from "configs/atoms";
-import rgbDataURL from "helpers/image-placeholder";
 import { useAtom } from "jotai";
+import { bottomNavAtom, isPrintAtom } from "lib/atoms";
+import useImagePlaceholder from "lib/hooks/use-image-placeholder";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback } from "react";
 
 const RightNav = () => {
+  const imagePlaceholder = useImagePlaceholder();
   const { data: session } = useSession();
   const [{ currentScreen, midButtonAction }] = useAtom(bottomNavAtom);
   const [isPrint, setIsPrint] = useAtom(isPrintAtom);
@@ -49,7 +50,7 @@ const RightNav = () => {
               src={session.user.image}
               fill
               placeholder="blur"
-              blurDataURL={rgbDataURL(96, 165, 250)}
+              blurDataURL={imagePlaceholder}
               sizes="100%"
               alt="user avatar"
             />

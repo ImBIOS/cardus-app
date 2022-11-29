@@ -1,48 +1,48 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import AddAttachment from "components/ui/attachment/add-attcahment";
-import AttachmentElement from "components/ui/attachment/attachment-element";
+import axios from "axios";
 import Button from "components/ui/button";
 import InputField from "components/ui/form/input-field";
+import AddImage from "components/ui/image/add-image";
+import ImagePreview from "components/ui/image/image-preview";
+import { useAtom } from "jotai";
 import {
   bottomNavAtom,
+  imageAtom,
   isHideCreateBoxAtom,
   isWaitingUploadAtom,
   MidButtonAction
-} from "configs/atoms";
-import { boxPatchSchema } from "helpers/validations/box-patch-schema";
-import { useAtom } from "jotai";
+} from "lib/atoms";
+import { boxPatchSchema } from "lib/validations/box/box-patch-schema";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import LeftNav from "./left-nav";
 import MiddleNav from "./middle-nav";
 import RightNav from "./right-nav";
+
+type FormData = z.infer<typeof boxPatchSchema>;
 
 type Props = {
   hide?: boolean;
 };
 
 const BottomNav = ({ hide }: Props) => {
-  const { pathname } = useRouter();
+  const router = useRouter();
   const [isWaitingUpload] = useAtom(isWaitingUploadAtom);
   const [{ currentScreen }, setNav] = useAtom(bottomNavAtom);
   const [isHideCreateBox, setIsHideCreateBox] = useAtom(isHideCreateBoxAtom);
+  const [attachmentState] = useAtom(imageAtom);
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
-    setValue,
-    getValues,
-    control,
-    reset,
-    trigger,
-    setError
+    getValues
   } = useForm({ resolver: zodResolver(boxPatchSchema) });
 
   // Update nav global state
   useEffect(() => {
-    const currentPath = pathname.split("/");
+    const currentPath = router.pathname.split("/");
     let screenName = "home";
 
     // Clean up the path name
@@ -62,7 +62,27 @@ const BottomNav = ({ hide }: Props) => {
 
     // Update the current screen state when the route changes
     setNav({ currentScreen: screenName, midButtonAction });
-  }, [currentScreen, pathname, setNav]);
+  }, [currentScreen, router.pathname, setNav]);
+
+  const submitBox = async (values: FormData) => {
+    // Get url and fileName from attachmentState
+    const images: string[] = [];
+    for (const value of attachmentState.values()) {
+      images.push(value?.url as string);
+    }
+
+    const res = await axios.post("/api/box", { ...values, images });
+    const record = res.data;
+
+    router.replace(`/box/${record.id}/edit`);
+  };
+
+  const handleCreate = () => {
+    submitBox(getValues());
+    setIsHideCreateBox(true);
+  };
+
+  const handleCancel = () => setIsHideCreateBox(true);
 
   return (
     <section
@@ -77,7 +97,7 @@ const BottomNav = ({ hide }: Props) => {
           <RightNav />
         </>
       ) : (
-        <section className="mx-8 flex h-full flex-col justify-between py-10">
+        <section className="flex h-full w-screen flex-col justify-between px-8 py-10">
           <div>
             <InputField
               register={register}
@@ -89,28 +109,21 @@ const BottomNav = ({ hide }: Props) => {
             />
             <InputField
               register={register}
-              id="name"
+              id="location"
               flavour="subtitle"
               placeholder="Location"
               autoComplete="off"
             />
-            <div className="flex items-center gap-4">
-              <AddAttachment className="relative my-8 h-16 w-16 rounded-full bg-blue-400 p-3" />
-              <AttachmentElement className="my-8 -mr-48 w-3/4" />
+            <div className="my-8 flex items-center gap-4">
+              <AddImage className="relative h-16 w-16 rounded-full bg-blue-400 p-3" />
+              <ImagePreview className="-mr-48 w-3/4" />
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <Button
-              disabled={isWaitingUpload}
-              onClick={() => console.log("create")}
-            >
+            <Button disabled={isWaitingUpload} onClick={handleCreate}>
               Create
             </Button>
-            <Button
-              disabled={isWaitingUpload}
-              flavour="secondary"
-              onClick={() => setIsHideCreateBox(true)}
-            >
+            <Button flavour="secondary" onClick={handleCancel}>
               Cancel
             </Button>
           </div>

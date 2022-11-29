@@ -1,8 +1,8 @@
 import PromptScreen from "components/screen/prompt/prompt-screen";
 import BottomNav from "components/ui/nav/bottom-nav";
 import TopNav from "components/ui/nav/top-nav";
-import { isLoadingAtom, isMobileAtom } from "configs/atoms";
 import { useAtom } from "jotai";
+import { isLoadingAtom, isMobileAtom } from "lib/atoms";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { ReactNode, useEffect } from "react";
@@ -34,7 +34,7 @@ const MobileLayout = ({ children }: Props): JSX.Element => {
         <title>Cardus</title>
       </Head>
       <TopNav />
-      <main className="mx-4 mt-2 mb-48">{children}</main>
+      <main>{children}</main>
       <BottomNav />
     </>
   );

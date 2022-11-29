@@ -7,16 +7,17 @@ import { getSession } from "next-auth/react";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     try {
+      const boxId = req.query.boxId as string;
       const session = await getSession({ req });
 
       if (session?.user.id) {
-        const boxes = await db.box.findMany({
+        const items = await db.item.findMany({
           where: {
-            userId: session.user.id
+            boxId
           }
         });
 
-        return res.status(200).json(boxes);
+        return res.status(200).json(items);
       }
     } catch (error) {
       return res.status(500).end();

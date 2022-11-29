@@ -1,16 +1,13 @@
 import MobileLayout from "components/layout/mobile-layout";
-import dynamic from "next/dynamic";
+import QrReader from "components/ui/qr-reader";
 
-const QRScanner = dynamic(() => import("components/ui/qr-scanner"), {
-  ssr: false
-});
-
-const Scan: React.FC = () => {
+const Scan = () => {
   return (
     <MobileLayout>
-      {/* TODO: Browser Unresponsive Problem */}
-      {/* <QRScanner /> */}
-      <h1 className="text-2xl font-medium">Under Construction 🏗️🚧</h1>
+      <div className="absolute top-0 h-screen w-screen">
+        <QrReader className="h-screen w-screen object-cover" />
+      </div>
+      {/* <h1 className="text-2xl font-medium">Under Construction 🏗️🚧</h1> */}
     </MobileLayout>
   );
 };

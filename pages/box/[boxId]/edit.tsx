@@ -1,11 +1,13 @@
 import { MinusIcon } from "@heroicons/react/24/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import MobileLayout from "components/layout/mobile-layout";
 import PromptScreen from "components/screen/prompt/prompt-screen";
-import AttachmentElement from "components/ui/attachment/attachment-element";
-import { attachmentAtom, IAttachment, topNavAtom } from "configs/atoms";
-import { boxPatchSchema } from "helpers/validations/box-patch-schema";
+import ImagePreview from "components/ui/image/image-preview";
 import { useAtom } from "jotai";
+import { IImage, imageAtom, topNavAtom } from "lib/atoms";
+import fetcher from "lib/fetcher";
+import { boxPatchSchema } from "lib/validations/box/box-patch-schema";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -18,18 +20,14 @@ const EditBox = () => {
   const router = useRouter();
   const { boxId } = router.query;
   const [_, setTopNav] = useAtom(topNavAtom);
-  const [attachmentState] = useAtom(attachmentAtom);
+  const [attachmentState] = useAtom(imageAtom);
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     setValue,
     getValues,
-    control,
-    reset,
-    trigger,
-    setError
+    control
   } = useForm<FormData>({
     resolver: zodResolver(boxPatchSchema)
   });
@@ -38,7 +36,6 @@ const EditBox = () => {
     name: "items"
   });
 
-  const fetcher = (url: RequestInfo) => fetch(url).then((r) => r.json());
   const { data, error } = useSWR(
     () => (boxId ? "/api/box/" + boxId : null),
     fetcher
@@ -47,7 +44,7 @@ const EditBox = () => {
   // Set defaultValue for the form
   useEffect(() => {
     if (data) {
-      const { name, location, items, attachments } = data.res;
+      const { name, location, items, attachments } = data;
 
       setValue("name", name);
       setValue("location", location);
@@ -66,13 +63,13 @@ const EditBox = () => {
     const onSubmit = (values: FormData) => {
       if (data) {
         const { name, location } = values;
-        const box = data.res;
+        const box = data;
 
         // Clean items from empty values
         const items = values.items?.filter((item) => item.name !== "");
 
         // Turn attachmentState Map into an array of url object
-        const attachments: IAttachment[] = [];
+        const attachments: IImage[] = [];
         for (const value of attachmentState.values()) {
           attachments?.push({
             url: value.metadata?.url as string,
@@ -91,13 +88,8 @@ const EditBox = () => {
         location != box.location && (req.location = location);
 
         const updateData = async (data: FormData) => {
-          const res = await fetch(`/api/box/${data.id}`, {
-            method: "PATCH",
-            body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" }
-          });
-          const record = await res.json();
-          return record.id;
+          const res = await axios.patch("/api/box", data);
+          return res.id;
         };
 
         // If there is no change, throw Error
@@ -119,7 +111,7 @@ const EditBox = () => {
   if (error) return <div>failed to load</div>;
   if (!data) return <PromptScreen type="loading" />;
 
-  const box = data.res;
+  const box = data;
 
   const handleOnItemInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -181,7 +173,7 @@ const EditBox = () => {
             </button>
           </div>
         ))}
-        <AttachmentElement box={box} />
+        <ImagePreview images={box.images} />
       </section>
     </MobileLayout>
   );

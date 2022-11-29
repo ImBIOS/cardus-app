@@ -1,11 +1,11 @@
 import { CheckIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { useAtom } from "jotai";
 import {
   bottomNavAtom,
   isPrintAtom,
   isWaitingUploadAtom,
   topNavAtom
-} from "configs/atoms";
-import { useAtom } from "jotai";
+} from "lib/atoms";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useMemo } from "react";

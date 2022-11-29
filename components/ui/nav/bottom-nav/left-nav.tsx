@@ -3,15 +3,15 @@ import {
   HomeIcon,
   TrashIcon
 } from "@heroicons/react/24/solid";
+import axios from "axios";
 import Tooltip from "components/ui/tooltip";
+import { useAtom } from "jotai";
 import {
-  attachmentAtom,
   bottomNavAtom,
   boxIdAtom,
   isLoadingAtom,
   isPrintAtom
-} from "configs/atoms";
-import { useAtom } from "jotai";
+} from "lib/atoms";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
@@ -21,7 +21,6 @@ const LeftNav = () => {
 
   const [boxId] = useAtom(boxIdAtom);
   const [isPrint] = useAtom(isPrintAtom);
-  const [attachmentState] = useAtom(attachmentAtom);
   const [_, setIsLoading] = useAtom(isLoadingAtom);
   const [{ currentScreen, midButtonAction }] = useAtom(bottomNavAtom);
 
@@ -40,22 +39,13 @@ const LeftNav = () => {
     try {
       setIsLoading(true);
 
-      // Get attachments array from attachmentState
-      const attachments = Array.from(attachmentState.values()).map(
-        (attachment) => attachment.metadata
-      );
-      const data = { id: boxId, attachments };
-      const res = await fetch(`/api/box/${boxId}`, {
-        method: "DELETE",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      });
-      const record = await res.json();
-      return record.id;
+      const res = await axios.delete(`/api/box/${boxId}`);
+      return res.data.id;
     } catch (err) {
       console.error(err);
     }
-  }, [attachmentState, boxId, setIsLoading]);
+  }, [boxId, setIsLoading]);
+
   return (
     <>
       {midButtonAction === "" && (

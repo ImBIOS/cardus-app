@@ -1,10 +1,10 @@
 import { UseFormRegister } from "react-hook-form";
 
 type Props = {
-  id: string;
+  id?: string;
   flavour?: "title" | "subtitle" | "body";
   className?: string;
-  register: UseFormRegister<any>;
+  register?: UseFormRegister<any>;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 const InputField = ({ id, flavour, className, register, ...props }: Props) => {
@@ -16,11 +16,22 @@ const InputField = ({ id, flavour, className, register, ...props }: Props) => {
       : // body/default
         "text-lg";
 
+  if (register)
+    return (
+      <input
+        className={`w-full bg-transparent outline-none ${className} ${flavourClassName}`}
+        id={id}
+        {...register(id as string)}
+        {...props}
+      />
+    );
+
   return (
     <input
-      className={`w-full bg-transparent outline-none ${className} ${flavourClassName}`}
+      className={`w-full bg-transparent outline-none ${className} ${flavourClassName} ${
+        props.readOnly ? "text-ellipsis" : ""
+      }`}
       id={id}
-      {...register(id as string)}
       {...props}
     />
   );

@@ -1,0 +1,15 @@
+[
+  {
+    "origin": [
+      "*"
+    ],
+    "method": [
+      "POST",
+      "DELETE"
+    ],
+    "responseHeader": [
+      "*"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]

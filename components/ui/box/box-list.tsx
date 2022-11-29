@@ -1,17 +1,17 @@
+import fetcher from "lib/fetcher";
 import Link from "next/link";
 import useSWR from "swr";
 import BoxItem from "./box-item";
 
 const BoxList: React.FC = () => {
-  const fetcher = (url: RequestInfo) => fetch(url).then((r) => r.json());
   const { data, error } = useSWR("/api/boxes", fetcher);
 
-  if (error || !data || data?.res?.length === 0)
+  if (error || !data || data?.length === 0)
     return (
-      <section className="flex h-screen flex-col items-center justify-center text-center">
+      <section className="no-scrollbar mb-48 flex h-[36rem] flex-col flex-wrap items-center justify-center gap-2 overflow-y-clip text-center">
         {error && <>🥹 failed to load</>}
         {!data && <>📦 Loading boxes...</>}
-        {data?.res?.length === 0 && (
+        {data?.length === 0 && (
           <>
             🤔 No box created yet.
             <br />
@@ -33,8 +33,8 @@ const BoxList: React.FC = () => {
     );
 
   return (
-    <section className="no-scrollbar mb-36 flex flex-row flex-wrap gap-2 overflow-y-clip">
-      {data.res.map((itemData: any, idx: number) => (
+    <section className="no-scrollbar mb-72 flex flex-row flex-wrap gap-2 overflow-y-clip">
+      {data.map((itemData: any, idx: number) => (
         <BoxItem key={`storageItem-${idx}`} itemData={itemData} />
       ))}
     </section>

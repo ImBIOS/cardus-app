@@ -1,15 +1,11 @@
 import { atom } from "jotai";
 
-export type IAttachment = {
-  fileName?: string;
-  url: string;
-};
-
-export interface IAttachmentAtom {
+export interface IImageAtom {
   progress?: number;
   status?: string;
-  metadata?: IAttachment;
-  [key: string]: string | number | IAttachment | undefined;
+  url?: string;
+  preview?: string;
+  [key: string]: string | number | undefined;
 }
 
 export type MidButtonAction = "edit" | "attachment" | "";
@@ -36,7 +32,7 @@ export const midBottomNavAtom = atom({
   onClick: () => {}
 });
 
-export const attachmentAtom = atom(new Map<number, IAttachmentAtom>());
+export const imageAtom = atom(new Map<number, IImageAtom>());
 
 export const isLoadingAtom = atom(true);
 export const isHideCreateBoxAtom = atom(true);

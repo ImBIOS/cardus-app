@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
-const SearchCardus = () => {
+const SearchInput = () => {
   return (
     <form className="my-4">
       <label
@@ -28,4 +28,4 @@ const SearchCardus = () => {
   );
 };
 
-export default SearchCardus;
+export default SearchInput;

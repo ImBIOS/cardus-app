@@ -1,23 +1,24 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 import Modal from "components/ui/modal";
-import { attachmentAtom, IAttachment, IAttachmentAtom } from "configs/atoms";
 import { useAtom } from "jotai";
+import { IImageAtom, imageAtom } from "lib/atoms";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 type Props = {
-  box?: any;
+  images?: string[];
   readOnly?: boolean;
   className?: string;
 };
 
 interface IDeleteData {
   key: number;
-  value: IAttachmentAtom;
+  value: IImageAtom;
 }
 
-const AttachmentElement = ({ box, readOnly = false, className }: Props) => {
-  const [attachmentState, setAttachmentState] = useAtom(attachmentAtom);
+const ImagePreview = ({ images, readOnly = false, className }: Props) => {
+  const [imageState, setImageState] = useAtom(imageAtom);
 
   const [isOpen, setIsOpen] = useState(false);
   const [deleteData, setDeleteData] = useState<IDeleteData>();
@@ -29,59 +30,68 @@ const AttachmentElement = ({ box, readOnly = false, className }: Props) => {
     deleteData && handleDeleteAttachment(deleteData);
   };
 
-  // Delete attachment from Firebase Storage
+  // Delete attachment from Storage
   const deleteAttachment = async (fileName: string) =>
-    await fetch("/api/attachment", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ fileName })
-    });
+    await axios.delete(`/api/image/${fileName}`);
 
   const handleDeleteAttachment = ({ key, value }: IDeleteData) => {
-    deleteAttachment(value?.metadata?.fileName as string);
-    setAttachmentState((prev) => {
+    if (value.url) {
+      const filename = value.url
+        .split("/")
+        .reverse()[0]
+        .replace("?alt=media", "");
+
+      deleteAttachment(filename);
+    }
+
+    setImageState((prev) => {
       const newMap = new Map(prev);
       newMap.delete(key);
       return newMap;
     });
   };
 
-  // If box.attachments.length more than 0, then setAttachmentState with these attachments as Map
+  // If box.images.length more than 0, then setAttachmentState with these images as Map
   useEffect(() => {
-    if (box && box.attachments.length > 0) {
+    if (images && images.length > 0) {
       const map = new Map();
-      box.attachments.forEach((attachment: IAttachment, index: number) => {
-        map.set(index, { metadata: attachment });
+      images.forEach((image: string, index: number) => {
+        map.set(index, { url: image });
       });
-      setAttachmentState(map);
+      setImageState(map);
     }
-  }, [box, setAttachmentState]);
+  }, [images, setImageState]);
 
-  if (attachmentState.size === 0)
+  if (imageState.size === 0)
     return <div className={className}>🌅 No image</div>;
 
   return (
     <div
       className={`relative flex h-40 items-center justify-start overflow-x-auto overflow-y-clip bg-transparent ${className}`}
     >
-      {Array.from(attachmentState).map(([key, value]) => {
-        const isRunning = attachmentState.get(key)?.status === "running";
-        const progressString = attachmentState.get(key)?.progress + "%";
+      {Array.from(imageState).map(([key, value]) => {
+        const status = imageState.get(key)?.status;
+        const isRunning = status === "running";
+        const isError = status === "error";
+        const progressString = imageState.get(key)?.progress + "%";
 
         return (
-          <div key={`attachment-${key}`} className="relative mx-1 h-40 w-full">
-            <div className="relative w-48" />
+          <div key={`attachment-${key}`} className="relative mx-1 h-40 w-48">
+            <div className="relative w-full" />
             <Image
               fill
               sizes="100%"
-              src={value?.metadata?.url as string}
+              src={(value?.url as string) || (value?.preview as string)}
               alt=""
               className={`rounded-lg object-cover hover:cursor-pointer ${
-                isRunning ? "animate-pulse" : ""
+                isRunning && "animate-pulse"
               }`}
             />
+            {isError && (
+              <div className="opacity-z-50 absolute flex h-40 w-full animate-pulse items-center justify-center rounded-md bg-red-500 text-white">
+                Error, You can delete it.
+              </div>
+            )}
             {/* Delete button */}
             {!readOnly && (
               <button
@@ -115,4 +125,4 @@ const AttachmentElement = ({ box, readOnly = false, className }: Props) => {
     </div>
   );
 };
-export default AttachmentElement;
+export default ImagePreview;
