@@ -3,18 +3,30 @@ import {
   QuestionMarkCircleIcon,
   UserCircleIcon
 } from "@heroicons/react/24/solid";
+import ComponentToPrint from "components/ui/component-to-print";
 import Tooltip from "components/ui/tooltip";
 import { useAtom } from "jotai";
-import { bottomNavAtom, isPrintAtom } from "lib/atoms";
+import {
+  bottomNavAtom,
+  boxIdAtom,
+  componentToPrintAtom,
+  isPrintAtom
+} from "lib/atoms";
 import useImagePlaceholder from "lib/hooks/use-image-placeholder";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback } from "react";
+import { useRouter } from "next/router";
+import QRCode from "qrcode";
+import { useCallback, useEffect, useState } from "react";
+import { useReactToPrint } from "react-to-print";
 
 const RightNav = () => {
+  const router = useRouter();
   const imagePlaceholder = useImagePlaceholder();
   const { data: session } = useSession();
+  const [boxId] = useAtom(boxIdAtom);
+  const [componentToPrint] = useAtom(componentToPrintAtom);
   const [{ currentScreen, midButtonAction }] = useAtom(bottomNavAtom);
   const [isPrint, setIsPrint] = useAtom(isPrintAtom);
 
@@ -29,15 +41,30 @@ const RightNav = () => {
     return text[Math.floor(Math.random() * text.length)];
   };
 
-  const generatePDF = useCallback(() => {
+  const handleComponentPrint = useReactToPrint({
+    content: () => componentToPrint.current as HTMLDivElement
+  });
+
+  const handlePrint = useCallback(() => {
     setIsPrint(true);
-    // Wait for re-render to finish
-    const print = setInterval(() => {
-      window?.print();
-      setIsPrint(false);
-      clearInterval(print);
-    }, 1);
-  }, [setIsPrint]);
+    handleComponentPrint();
+  }, [handleComponentPrint, setIsPrint]);
+
+  // Set QR code
+  const [qr, setQR] = useState("");
+  useEffect(() => {
+    if (boxId) {
+      const fullURL = router.basePath + router.asPath;
+      QRCode.toDataURL(fullURL)
+        .then((url) => {
+          setQR(url);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [boxId, router.asPath, router.basePath]);
+
   return (
     <>
       {midButtonAction === "" && (
@@ -64,10 +91,17 @@ const RightNav = () => {
         </Link>
       )}
       {midButtonAction === "edit" && (
-        <PrinterIcon
-          className={`h-10 w-10 ${isPrint && "hidden"}`}
-          onClick={generatePDF}
-        />
+        <>
+          <PrinterIcon
+            className={`h-10 w-10 ${isPrint && "hidden"}`}
+            onClick={handlePrint}
+          />
+          {qr && (
+            <div className="hidden">
+              <ComponentToPrint qr={qr} />
+            </div>
+          )}
+        </>
       )}
       {midButtonAction === "attachment" && (
         <Tooltip text={randomTooltipText()}>

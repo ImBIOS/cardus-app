@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { RefObject } from "react";
 
 export interface IImageAtom {
   progress?: number;
@@ -41,3 +42,7 @@ export const isMobileAtom = atom(false);
 export const isPrintAtom = atom(false);
 
 export const boxIdAtom = atom("");
+
+export const componentToPrintAtom = atom<RefObject<HTMLDivElement>>({
+  current: null
+});
