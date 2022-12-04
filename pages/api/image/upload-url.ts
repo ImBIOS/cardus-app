@@ -13,7 +13,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const bucket = storage.bucket(process.env.BUCKET_NAME as string);
       const file = bucket.file(`images/${session?.user.id}/${req.query.file}`);
       const options = {
-        expires: Date.now() + 1 * 60 * 1000 //  1 minute,
+        expires: Date.now() + 1 * 60 * 1000, //  1 minute,
         // fields: { "x-goog-meta-test": "data" } // Add custom image metadata
       };
 

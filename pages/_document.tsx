@@ -3,7 +3,7 @@ import Document, {
   Head,
   Html,
   Main,
-  NextScript
+  NextScript,
 } from "next/document";
 
 class CustomDocument extends Document {

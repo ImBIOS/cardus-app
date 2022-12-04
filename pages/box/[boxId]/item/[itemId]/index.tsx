@@ -2,7 +2,7 @@ import MobileLayout from "components/layout/mobile-layout";
 import PromptScreen from "components/screen/prompt/prompt-screen";
 import ImagePreview from "components/ui/image/image-preview";
 import { useAtom } from "jotai";
-import { boxIdAtom, isPrintAtom } from "lib/atoms";
+import { boxIdAtom } from "lib/atoms";
 import fetcher from "lib/fetcher";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -12,7 +12,6 @@ import useSWR from "swr";
 
 const ItemId = () => {
   const router = useRouter();
-  const [isPrint] = useAtom(isPrintAtom);
   const [_, setBoxIdState] = useAtom(boxIdAtom);
 
   const [qr, setQR] = useState("");
@@ -47,13 +46,11 @@ const ItemId = () => {
   return (
     <MobileLayout>
       <section className="mx-auto mt-8 mb-0 flex w-[90%] max-w-4xl flex-col">
-        {/* <!-- Header Dropdown --> */}
-
         <section>
           <div className="mb-4 flex">
             {/* QR */}
             {qr && (
-              <div className={`mr-8 ${!isPrint && "hidden"}`} ref={ref}>
+              <div className="mr-8" ref={ref}>
                 <Image
                   src={qr}
                   width={192}

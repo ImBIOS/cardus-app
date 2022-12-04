@@ -1,10 +1,12 @@
 import MobileLayout from "components/layout/mobile-layout";
 import PromptScreen from "components/screen/prompt/prompt-screen";
+import Button from "components/ui/button";
 import BoxDisclosure from "components/ui/disclosure/box-disclosure";
-import ImagePreview from "components/ui/image/image-preview";
+import ItemPreview from "components/ui/item-preview";
 import { useAtom } from "jotai";
-import { boxIdAtom, isPrintAtom } from "lib/atoms";
+import { boxIdAtom } from "lib/atoms";
 import fetcher from "lib/fetcher";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
@@ -34,49 +36,20 @@ const Box: React.FC = () => {
           title={box.name}
           subtitle={box.location}
           images={box.images}
+          className="mb-4"
         />
 
-        <section>
-          <div className="mb-4 flex">
-            <div>
-              <input
-                className="w-full cursor-default border-0 bg-transparent text-4xl  font-semibold leading-3 outline-none"
-                type="text"
-                name="name"
-                autoComplete="off"
-                placeholder="Storage Name"
-                defaultValue={box.name || ""}
-                readOnly
-              />
-              <input
-                className="mt-2 w-full cursor-default border-0 bg-transparent py-2 px-0 font-light outline-none"
-                placeholder="Storage Location"
-                defaultValue={box.location || ""}
-                name="place"
-                type="text"
-                autoComplete="off"
-                readOnly
-              />
-            </div>
+        {/* <!-- Items --> */}
+        {box?.items.length > 0 ? (
+          box.items.map((item: any) => (
+            <ItemPreview key={item.id} item={item} />
+          ))
+        ) : (
+          <div className="mt-12 flex h-full justify-center">
+            <Link href={`/box/${boxId}/item/add`} passHref>
+              <Button>Add Item</Button>
+            </Link>
           </div>
-          <div className="relative flex h-40 items-center justify-start overflow-x-auto overflow-y-clip bg-transparent">
-            <ImagePreview images={box.images} readOnly />
-          </div>
-        </section>
-        {box?.items?.map(
-          (
-            item: { name: string | number | readonly string[] | undefined },
-            index: string | number
-          ) => (
-            <input
-              key={`item-${index}`}
-              name="items"
-              defaultValue={item.name}
-              placeholder="Item Name"
-              readOnly
-              className="bg-transparent py-4 px-0 text-lg outline-none"
-            />
-          )
         )}
       </section>
     </MobileLayout>

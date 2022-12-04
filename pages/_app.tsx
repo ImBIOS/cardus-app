@@ -3,11 +3,11 @@ import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
-import "styles/dist.css";
+import "styles/globals.css";
 
 function MyApp({
   Component,
-  pageProps: { session, ...pageProps }
+  pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
   return (
     <Provider>

@@ -13,10 +13,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "GET") {
     try {
-      const box = await db.box.findUnique({
+      const box = await db.box.findFirst({
         where: {
-          id: boxId as string
-        }
+          id: boxId as string,
+        },
+        include: {
+          items: true,
+        },
       });
 
       if (!box) return res.status(404).end();
@@ -31,9 +34,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       const box = await db.box.update({
         where: {
-          id: boxId as string
+          id: boxId as string,
         },
-        data: body
+        data: body,
       });
 
       return res.status(200).json(box);
@@ -48,8 +51,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
       const box = await db.box.findFirst({
         where: {
-          id: boxId as string
-        }
+          id: boxId as string,
+        },
       });
 
       if (!box) return res.status(404).end();
@@ -63,8 +66,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       const deletedBox = await db.box.delete({
         where: {
-          id: boxId as string
-        }
+          id: boxId as string,
+        },
       });
 
       return res.status(200).json(deletedBox);

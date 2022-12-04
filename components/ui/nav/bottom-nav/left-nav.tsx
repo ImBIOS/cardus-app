@@ -1,17 +1,12 @@
 import {
   EllipsisVerticalIcon,
   HomeIcon,
-  TrashIcon
+  TrashIcon,
 } from "@heroicons/react/24/solid";
 import axios from "axios";
 import Tooltip from "components/ui/tooltip";
 import { useAtom } from "jotai";
-import {
-  bottomNavAtom,
-  boxIdAtom,
-  isLoadingAtom,
-  isPrintAtom
-} from "lib/atoms";
+import { bottomNavAtom, boxIdAtom, isLoadingAtom } from "lib/atoms";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
@@ -20,7 +15,6 @@ const LeftNav = () => {
   const router = useRouter();
 
   const [boxId] = useAtom(boxIdAtom);
-  const [isPrint] = useAtom(isPrintAtom);
   const [_, setIsLoading] = useAtom(isLoadingAtom);
   const [{ currentScreen, midButtonAction }] = useAtom(bottomNavAtom);
 
@@ -29,7 +23,7 @@ const LeftNav = () => {
       "🤔 What is this?",
       "🐛 Is it a bug?",
       "😋 I wonder this...",
-      "🏃 I'm running to..."
+      "🏃 I'm running to...",
     ];
 
     return text[Math.floor(Math.random() * text.length)];
@@ -59,7 +53,7 @@ const LeftNav = () => {
       )}
       {midButtonAction === "edit" && (
         <TrashIcon
-          className={`h-10 w-10 text-red-400 ${isPrint && "hidden"}`}
+          className="h-10 w-10 text-red-400"
           onClick={() => deleteBox().then(() => router.replace("/"))}
         />
       )}

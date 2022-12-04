@@ -12,8 +12,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       if (session?.user.id) {
         const boxes = await db.box.findMany({
           where: {
-            userId: session.user.id
-          }
+            userId: session.user.id,
+          },
+          include: {
+            items: true,
+          },
         });
 
         return res.status(200).json(boxes);

@@ -1,14 +1,17 @@
 {
   "extends": [
-    "next/core-web-vitals",
     "next",
+    "next/core-web-vitals",
     "plugin:cypress/recommended",
     "plugin:prettier/recommended",
     "plugin:react-hooks/recommended"
   ],
+  "globals": {
+    "React": "readonly"
+  },
   "plugins": ["cypress", "prettier", "react-hooks"],
   "rules": {
-    "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
-    "no-alert": "warn"
+    "no-console": ["error", { "allow": ["info", "warn", "error"] }],
+    "no-alert": "error"
   }
 }

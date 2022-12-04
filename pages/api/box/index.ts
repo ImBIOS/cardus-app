@@ -20,8 +20,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             name: name as string,
             images: images as string[],
             location: location as string,
-            userId: session.user.id
-          }
+            userId: session.user.id,
+          },
         });
 
         return res.status(200).json(box);

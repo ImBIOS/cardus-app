@@ -8,24 +8,24 @@ export default NextAuth({
   adapter: PrismaAdapter(db),
   secret: "cardus-secret-1s-s0-s3cr3t",
   pages: {
-    signIn: "/auth/signin"
+    signIn: "/auth/signin",
   },
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID as string,
-      clientSecret: process.env.GOOGLE_SECRET as string
+      clientSecret: process.env.GOOGLE_SECRET as string,
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string
-    })
+      clientSecret: process.env.GITHUB_SECRET as string,
+    }),
     // ...add more providers here
   ],
   callbacks: {
     session: async ({ session, user }) => {
       session.user.id = user.id;
       return session;
-    }
-  }
+    },
+  },
 });

@@ -13,8 +13,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       if (session?.user.id) {
         const items = await db.item.findMany({
           where: {
-            boxId
-          }
+            boxId,
+          },
         });
 
         return res.status(200).json(items);

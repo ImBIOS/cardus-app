@@ -1,24 +1,19 @@
 import {
   PrinterIcon,
   QuestionMarkCircleIcon,
-  UserCircleIcon
+  UserCircleIcon,
 } from "@heroicons/react/24/solid";
 import ComponentToPrint from "components/ui/component-to-print";
 import Tooltip from "components/ui/tooltip";
 import { useAtom } from "jotai";
-import {
-  bottomNavAtom,
-  boxIdAtom,
-  componentToPrintAtom,
-  isPrintAtom
-} from "lib/atoms";
+import { bottomNavAtom, boxIdAtom, componentToPrintAtom } from "lib/atoms";
 import useImagePlaceholder from "lib/hooks/use-image-placeholder";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import QRCode from "qrcode";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 const RightNav = () => {
@@ -28,27 +23,21 @@ const RightNav = () => {
   const [boxId] = useAtom(boxIdAtom);
   const [componentToPrint] = useAtom(componentToPrintAtom);
   const [{ currentScreen, midButtonAction }] = useAtom(bottomNavAtom);
-  const [isPrint, setIsPrint] = useAtom(isPrintAtom);
 
   const randomTooltipText = () => {
     const text = [
       "🤔 What is this?",
       "🐛 Is it a bug?",
       "😋 I wonder this...",
-      "🏃 I'm running to..."
+      "🏃 I'm running to...",
     ];
 
     return text[Math.floor(Math.random() * text.length)];
   };
 
   const handleComponentPrint = useReactToPrint({
-    content: () => componentToPrint.current as HTMLDivElement
+    content: () => componentToPrint.current as HTMLDivElement,
   });
-
-  const handlePrint = useCallback(() => {
-    setIsPrint(true);
-    handleComponentPrint();
-  }, [handleComponentPrint, setIsPrint]);
 
   // Set QR code
   const [qr, setQR] = useState("");
@@ -92,10 +81,7 @@ const RightNav = () => {
       )}
       {midButtonAction === "edit" && (
         <>
-          <PrinterIcon
-            className={`h-10 w-10 ${isPrint && "hidden"}`}
-            onClick={handlePrint}
-          />
+          <PrinterIcon className="h-10 w-10" onClick={handleComponentPrint} />
           {qr && (
             <div className="hidden">
               <ComponentToPrint qr={qr} />

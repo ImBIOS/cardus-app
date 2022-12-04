@@ -3,7 +3,7 @@ import {
   ChevronDownIcon,
   ComputerDesktopIcon,
   MoonIcon,
-  SunIcon
+  SunIcon,
 } from "@heroicons/react/24/solid";
 import { useTheme } from "next-themes";
 import { Fragment, useEffect, useState } from "react";

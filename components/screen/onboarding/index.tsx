@@ -13,7 +13,7 @@ const OnboardingScreen = () => {
       localStorage.setItem("viewedOnboarding", "true");
       signIn();
     } else {
-      alert("Error: window is undefined");
+      console.error("Error: window is undefined");
     }
   };
 

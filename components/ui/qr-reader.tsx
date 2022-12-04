@@ -1,9 +1,11 @@
+import { useRouter } from "next/router";
 import QrScanner from "qr-scanner";
 import { useEffect, useRef } from "react";
 
 type Prop = {} & React.HTMLAttributes<HTMLDivElement>;
 
 const QrReader = ({ ...props }: Prop) => {
+  const router = useRouter();
   // const overlaySvgElem = useRef<SVGSVGElement>(null);
   // const overlayElem = useRef<HTMLDivElement>(null);
   const videoElem = useRef<HTMLVideoElement>(null);
@@ -11,14 +13,14 @@ const QrReader = ({ ...props }: Prop) => {
   useEffect(() => {
     let scanner: QrScanner | null = new QrScanner(
       videoElem.current as HTMLVideoElement,
-      (result) => console.log("decoded qr code:", result),
+      (result) => router.push(String(result)),
       {
         onDecodeError: (error) => {
           console.info(error);
         },
         returnDetailedScanResult: true,
         highlightScanRegion: true,
-        highlightCodeOutline: true
+        highlightCodeOutline: true,
         // overlay: overlayElem.current as HTMLDivElement
       }
     );
@@ -64,7 +66,7 @@ const QrReader = ({ ...props }: Prop) => {
       scanner?.destroy();
       scanner = null;
     };
-  }, []);
+  }, [router]);
 
   return (
     <div className="flex h-screen items-center justify-center" {...props}>

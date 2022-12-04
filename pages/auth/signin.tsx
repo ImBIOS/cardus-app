@@ -5,7 +5,7 @@ import {
   getCsrfToken,
   getProviders,
   getSession,
-  signIn
+  signIn,
 } from "next-auth/react";
 
 type Props = {
@@ -16,7 +16,7 @@ const Signin = ({ providers }: Props) => {
   // Background color for each OAuth Provider
   const providerColors = {
     Google: "bg-red-500",
-    GitHub: "bg-gray-900"
+    GitHub: "bg-gray-900",
   };
 
   return (
@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (session) {
     return {
-      redirect: { destination: "/", permanent: false }
+      redirect: { destination: "/", permanent: false },
     };
   }
 
@@ -54,6 +54,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const csrfToken = await getCsrfToken(context);
 
   return {
-    props: { providers, csrfToken }
+    props: { providers, csrfToken },
   };
 };

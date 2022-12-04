@@ -1,6 +1,6 @@
 const withPWA = require("next-pwa")({
   dest: "public",
-  disable: process.env.NODE_ENV === "development"
+  disable: process.env.NODE_ENV === "development",
   // Offline support
   // fallbacks: {
   //   image: "/static/images/fallback.png"
@@ -15,24 +15,24 @@ const nextConfig = withPWA({
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
-        pathname: "/a/**"
+        pathname: "/a/**",
       },
       {
         protocol: "https",
         hostname: "avatars.githubusercontent.com",
-        pathname: "/u/**"
+        pathname: "/u/**",
       },
       {
         protocol: "https",
         hostname: "firebasestorage.googleapis.com",
-        pathname: "/v0/b/cardus-dev.appspot.com/o/images**"
-      }
-    ]
+        pathname: "/v0/b/cardus-dev.appspot.com/o/images**",
+      },
+    ],
   },
   experimental: {
     // Required:
-    appDir: true
-  }
+    appDir: true,
+  },
 });
 
 module.exports = nextConfig;

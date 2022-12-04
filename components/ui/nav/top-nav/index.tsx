@@ -1,20 +1,14 @@
 import { CheckIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useAtom } from "jotai";
-import {
-  bottomNavAtom,
-  isPrintAtom,
-  isWaitingUploadAtom,
-  topNavAtom
-} from "lib/atoms";
+import { bottomNavAtom, isWaitingUploadAtom, topNavAtom } from "lib/atoms";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import TopLeft from "./top-left";
 
 const TopNav = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const [isPrint] = useAtom(isPrintAtom);
   const [isWaiting] = useAtom(isWaitingUploadAtom);
   const [{ currentScreen }] = useAtom(bottomNavAtom);
   const [{ submitAction }] = useAtom(topNavAtom);
@@ -25,16 +19,16 @@ const TopNav = () => {
   );
 
   const isFormScreen = useMemo(
-    () => ["add box", "edit box"].includes(currentScreen),
+    () => ["add item box", "edit box"].includes(currentScreen),
     [currentScreen]
   );
 
+  const handleOnBackArrowClick = useCallback(() => {
+    router.back();
+  }, [router]);
+
   return (
-    <section
-      className={`sticky top-0 z-10 flex justify-between border-b border-gray-800 bg-neutral-900 bg-opacity-30 p-4 pt-6 backdrop-blur-lg backdrop-filter ${
-        isPrint && "hidden"
-      }`}
-    >
+    <section className="sticky top-0 z-10 flex justify-between border-b border-gray-800 bg-neutral-900 bg-opacity-30 p-4 pt-6 backdrop-blur-lg backdrop-filter">
       <div className="flex items-center justify-start">
         {/* <!-- Hamburger --> */}
         {currentScreen === "home" && <TopLeft />}
@@ -43,7 +37,7 @@ const TopNav = () => {
         {isBoxScreen && (
           <ChevronLeftIcon
             className="h-10 w-10"
-            onClick={() => router.push("/")}
+            onClick={handleOnBackArrowClick}
           />
         )}
         <h1 className="ml-4 text-3xl font-bold capitalize">

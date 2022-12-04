@@ -1,6 +1,6 @@
 const prompt = {
   loading: "🔃 Loading...",
-  notMobile: "📱 Please use mobile device"
+  notMobile: "📱 Please use mobile device",
 };
 
 type Props = {

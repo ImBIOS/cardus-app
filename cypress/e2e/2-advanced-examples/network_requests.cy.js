@@ -44,8 +44,8 @@ context("Network Requests", () => {
       url: "https://jsonplaceholder.cypress.io/comments",
       qs: {
         postId: 1,
-        id: 3
-      }
+        id: 3,
+      },
     })
       .its("body")
       .should("be.an", "array")
@@ -53,7 +53,7 @@ context("Network Requests", () => {
       .its("0") // yields first element of the array
       .should("contain", {
         postId: 1,
-        id: 3
+        id: 3,
       });
   });
 
@@ -71,7 +71,7 @@ context("Network Requests", () => {
         cy.request("POST", "https://jsonplaceholder.cypress.io/posts", {
           userId: user.id,
           title: "Cypress Test Runner",
-          body: "Fast, easy and reliable testing for anything that runs in a browser."
+          body: "Fast, easy and reliable testing for anything that runs in a browser.",
         });
       })
       // note that the value here is the returned value of the 2nd request
@@ -79,7 +79,7 @@ context("Network Requests", () => {
       .then((response) => {
         expect(response).property("status").to.equal(201); // new entity created
         expect(response).property("body").to.contain({
-          title: "Cypress Test Runner"
+          title: "Cypress Test Runner",
         });
 
         // we don't know the exact post id - only that it will be > 100
@@ -111,7 +111,7 @@ context("Network Requests", () => {
         cy.request("POST", "https://jsonplaceholder.cypress.io/posts", {
           userId: this.user.id,
           title: "Cypress Test Runner",
-          body: "Fast, easy and reliable testing for anything that runs in a browser."
+          body: "Fast, easy and reliable testing for anything that runs in a browser.",
         })
           .its("body")
           .as("post"); // save the new post from the response
@@ -162,13 +162,13 @@ context("Network Requests", () => {
     cy.intercept(
       {
         method: "PUT",
-        url: "**/comments/*"
+        url: "**/comments/*",
       },
       {
         statusCode: 404,
         body: { error: message },
         headers: { "access-control-allow-origin": "*" },
-        delayMs: 500
+        delayMs: 500,
       }
     ).as("putComment");
 

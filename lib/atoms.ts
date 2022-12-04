@@ -19,18 +19,18 @@ interface IBottomNavAtom {
 
 export const bottomNavAtom = atom<IBottomNavAtom>({
   currentScreen: "home",
-  midButtonAction: ""
+  midButtonAction: "",
 });
 
 export const topNavAtom = atom({
-  submitAction: () => {}
+  submitAction: () => {},
 });
 
 export const midBottomNavAtom = atom({
   animation: "",
   isAnimating: false,
   iconRotation: 0,
-  onClick: () => {}
+  onClick: () => {},
 });
 
 export const imageAtom = atom(new Map<number, IImageAtom>());
@@ -39,10 +39,9 @@ export const isLoadingAtom = atom(true);
 export const isHideCreateBoxAtom = atom(true);
 export const isWaitingUploadAtom = atom(false);
 export const isMobileAtom = atom(false);
-export const isPrintAtom = atom(false);
 
 export const boxIdAtom = atom("");
 
 export const componentToPrintAtom = atom<RefObject<HTMLDivElement>>({
-  current: null
+  current: null,
 });

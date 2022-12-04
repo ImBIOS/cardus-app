@@ -11,7 +11,7 @@ context("Cypress.Commands", () => {
     Cypress.Commands.add(
       "console",
       {
-        prevSubject: true
+        prevSubject: true,
       },
       (subject, method) => {
         // the previous subject is automatically received
@@ -70,7 +70,7 @@ context("Cypress.Cookies", () => {
     // now any cookie with the name 'session_id' will
     // not be cleared before each new test runs
     Cypress.Cookies.defaults({
-      preserve: "session_id"
+      preserve: "session_id",
     });
   });
 });
@@ -145,7 +145,7 @@ context("Cypress.env()", () => {
     // set multiple environment variables
     Cypress.env({
       host: "veronica.dev.local",
-      api_server: "http://localhost:8888/v1/"
+      api_server: "http://localhost:8888/v1/",
     });
 
     // get environment variable
@@ -207,7 +207,7 @@ context("Cypress.spec", () => {
     cy.wrap(Cypress.spec).should("include.keys", [
       "name",
       "relative",
-      "absolute"
+      "absolute",
     ]);
   });
 });

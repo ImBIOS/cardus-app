@@ -34,7 +34,7 @@ const Modal = ({
   description,
   acceptText,
   onAccept,
-  onCancel
+  onCancel,
 }: Props) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>

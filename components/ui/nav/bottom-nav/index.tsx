@@ -10,7 +10,7 @@ import {
   imageAtom,
   isHideCreateBoxAtom,
   isWaitingUploadAtom,
-  MidButtonAction
+  MidButtonAction,
 } from "lib/atoms";
 import { boxPatchSchema } from "lib/validations/box/box-patch-schema";
 import { useRouter } from "next/router";
@@ -32,12 +32,12 @@ const BottomNav = ({ hide }: Props) => {
   const [isWaitingUpload] = useAtom(isWaitingUploadAtom);
   const [{ currentScreen }, setNav] = useAtom(bottomNavAtom);
   const [isHideCreateBox, setIsHideCreateBox] = useAtom(isHideCreateBoxAtom);
-  const [attachmentState] = useAtom(imageAtom);
+  const [attachmentState, setAttachmentState] = useAtom(imageAtom);
 
   const {
     register,
     formState: { errors },
-    getValues
+    getValues,
   } = useForm({ resolver: zodResolver(boxPatchSchema) });
 
   // Update nav global state
@@ -57,7 +57,7 @@ const BottomNav = ({ hide }: Props) => {
     // Update midButtonAction
     let midButtonAction: MidButtonAction = "";
     if (currentScreen === "box") midButtonAction = "edit";
-    else if (["add box", "edit box"].includes(currentScreen))
+    else if (["add item box", "edit box"].includes(currentScreen))
       midButtonAction = "attachment";
 
     // Update the current screen state when the route changes
@@ -74,14 +74,16 @@ const BottomNav = ({ hide }: Props) => {
     const res = await axios.post("/api/box", { ...values, images });
     const record = res.data;
 
-    router.replace(`/box/${record.id}/edit`);
+    if (record) {
+      // Clear the attachmentState when new box created
+      setAttachmentState(new Map());
+
+      setIsHideCreateBox(true);
+      router.replace(`/box/${record.id}`);
+    }
   };
 
-  const handleCreate = () => {
-    submitBox(getValues());
-    setIsHideCreateBox(true);
-  };
-
+  const handleCreate = () => submitBox(getValues());
   const handleCancel = () => setIsHideCreateBox(true);
 
   return (

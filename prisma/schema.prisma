@@ -11,27 +11,28 @@ datasource db {
 }
 
 model Box {
-  id        String   @id @default(cuid()) @map("_id")
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
   items     Item[]
   location  String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+  userId    String   @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
   images    String[]
 
   @@map("boxes")
 }
 
 model Item {
-  id        String   @id @default(cuid()) @map("_id")
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
   keywords  String[]
   box       Box      @relation(fields: [boxId], references: [id], onDelete: Cascade)
-  boxId     String
+  boxId     String   @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
+  images    String[]
 
   @@map("items")
 }
@@ -59,7 +60,7 @@ model Account {
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique @map("session_token")
-  userId       String   @map("user_id")
+  userId       String   @map("user_id") @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

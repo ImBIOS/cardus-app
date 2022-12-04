@@ -4,14 +4,35 @@ This is the Trusted Web Activity for the CardusApp project. It is a webapp that 
 
 ## 😎 Features
 
-- [ ] Warehouse management
-  - [ ] Create warehouse
-  - [ ] Add box to warehouse
-  - [ ] Manage warehouse access
-- [ ] Box management
-  - [ ] Create box
-  - [ ] Add item to box
-  - [ ] Individually manage box access
+- [ ] Feature: Box
+  - [x] Create Box
+    - [x] Add Box Name
+    - [x] Add Box Location
+    - [x] Add Box Image
+    - [x] Use Google Cloud Storage API
+  - [x] Create Item in Box
+    - [x] Add Item Name
+    - [x] Add Item Meta Search Keywords
+    - [x] Delete Item Meta Search
+    - [x] Add Item Image
+    - [x] Delete Item Image
+    - [x] Auto Label Image with AI
+  - [x] Read Box
+    - [x] Read Box Detail
+    - [x] Read All Box
+  - [ ] Update box detail
+  - [x] Delete Box
+    - [x] Delete Box Image
+  - [x] Read All Item in Box
+  - [x] Update Item Detail
+  - [x] Delete Item
+  - [ ] Print Box QR Code
+- [ ] Feature: Search
+  - [ ] Semantic Search Item
+  - [ ] Locate Item-in-Box by QR Scan
+- [ ] Feature: Scan QR
+  - [ ] Open Box Data by Scan
+  - [ ] Box Privacy & Authorization
 
 ## 🛠 Develop Locally
 

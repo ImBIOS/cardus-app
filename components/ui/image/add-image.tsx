@@ -22,7 +22,7 @@ const AddImage = ({ className }: Props) => {
         const newMap = new Map(prev);
         newMap.set(imageIndex, {
           ...newMap.get(imageIndex),
-          [key]: value
+          [key]: value,
         });
         return newMap;
       });
@@ -40,7 +40,7 @@ const AddImage = ({ className }: Props) => {
           imageState.set(imageIndex, {
             status: "running",
             url: "",
-            progress: 0
+            progress: 0,
           });
           updateImageState("preview", URL.createObjectURL(file));
 
@@ -67,7 +67,7 @@ const AddImage = ({ className }: Props) => {
               "image/apng",
               "image/bmp",
               "image/tiff",
-              "image/vnd.microsoft.icon"
+              "image/vnd.microsoft.icon",
             ],
 
             // The compression process is asynchronous,
@@ -97,7 +97,7 @@ const AddImage = ({ className }: Props) => {
                   axios
                     .post(url, formData, {
                       headers: {
-                        "Content-Type": "multipart/form-data"
+                        "Content-Type": "multipart/form-data",
                       },
                       onUploadProgress: (progressEvent) => {
                         const progress = Math.round(
@@ -107,7 +107,7 @@ const AddImage = ({ className }: Props) => {
                         );
 
                         updateImageState("progress", progress);
-                      }
+                      },
                     })
                     .then((res) => {
                       updateImageState("status", "uploaded");
@@ -121,7 +121,7 @@ const AddImage = ({ className }: Props) => {
             },
             error(err) {
               console.error(err.message);
-            }
+            },
           });
 
           break;

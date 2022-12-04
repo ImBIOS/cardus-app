@@ -46,7 +46,7 @@ const MiddleNav = ({ className }: Props) => {
       setMidButtonAnimation(className);
       clearInterval(waitAnimation);
     }, 100);
-  }, [midButtonAction, midButton, setMidButton]);
+  }, [midButton, midButtonAction, router.asPath, setMidButton]);
 
   return (
     <div className={`relative -mt-16 hover:cursor-pointer ${className}`}>
