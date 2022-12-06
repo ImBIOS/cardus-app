@@ -6,7 +6,6 @@ import GoogleProvider from "next-auth/providers/google";
 
 export default NextAuth({
   adapter: PrismaAdapter(db),
-  secret: "cardus-secret-1s-s0-s3cr3t",
   pages: {
     signIn: "/auth/signin",
   },
