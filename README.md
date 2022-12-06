@@ -33,6 +33,9 @@ This is the Trusted Web Activity for the CardusApp project. It is a webapp that 
 - [ ] Feature: Scan QR
   - [ ] Open Box Data by Scan
   - [ ] Box Privacy & Authorization
+- [ ] Feature: Trusted Web Activity
+  - [ ] Build TWA
+  - [ ] Publish to Google Play Store
 
 ## 🛠 Develop Locally
 
