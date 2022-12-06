@@ -36,6 +36,13 @@ This is the Trusted Web Activity for the CardusApp project. It is a webapp that 
 - [ ] Feature: Trusted Web Activity
   - [ ] Build TWA
   - [ ] Publish to Google Play Store
+- [ ] Testing
+  - [ ] Unit Testing
+  - [ ] Integration Testing
+  - [ ] E2E Testing
+- [ ] Storybook
+  - [x] Create Storybook
+  - [ ] Deploy Storybook
 
 ## 🛠 Develop Locally
 
