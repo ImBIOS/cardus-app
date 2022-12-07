@@ -26,6 +26,7 @@ describe("Google Login", () => {
     cy.get("button").contains("Google").should("be.visible");
   });
 
+  // TODO: This test is failing
   it("can login with google", () => {
     window.localStorage.setItem("viewedOnboarding", "true");
 
