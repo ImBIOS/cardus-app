@@ -5,6 +5,7 @@ const { GoogleSocialLogin } = require("cypress-social-logins").plugins;
 require("dotenv").config();
 
 export default defineConfig({
+  projectId: "97krk6",
   e2e: {
     baseUrl: "http://localhost:3000",
     chromeWebSecurity: false,
