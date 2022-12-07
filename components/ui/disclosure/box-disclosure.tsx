@@ -4,14 +4,19 @@ import BoxItemImages from "../box/box-item-images";
 import InputField from "../form/input-field";
 import ImagePreview from "../image/image-preview";
 
-type Props = {
+export type BoxDisclosureProps = {
   title?: string;
   subtitle?: string;
   images?: string[];
   className?: string;
 };
 
-const BoxDisclosure = ({ title, subtitle, images, className }: Props) => {
+const BoxDisclosure = ({
+  title,
+  subtitle,
+  images,
+  className,
+}: BoxDisclosureProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOnClick = () => setIsOpen(!isOpen);

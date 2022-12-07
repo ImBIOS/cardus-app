@@ -9,6 +9,7 @@ module.exports = {
     "@storybook/addon-interactions",
     "storybook-addon-next",
     "storybook-addon-swc",
+    "storybook-dark-mode",
   ],
   framework: "@storybook/react",
   core: {
