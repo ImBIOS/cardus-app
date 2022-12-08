@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import { Provider } from "jotai";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -14,6 +15,7 @@ function MyApp({
       <SessionProvider session={session}>
         <ThemeProvider attribute="class">
           <Component {...pageProps} />
+          <Analytics />
         </ThemeProvider>
       </SessionProvider>
     </Provider>
