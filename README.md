@@ -69,7 +69,7 @@ This is the Trusted Web Activity for the CardusApp project. It is a webapp that 
 1. Edit `cors.json`
 2. Run `gcloud storage buckets update gs://BUCKET_NAME --cors-file="cors.json"`
 
-### 🔍 How to Check
+#### 🔍 How to Check
 
 ```bash
 gcloud storage buckets describe gs://BUCKET_NAME --format="default(cors)"
