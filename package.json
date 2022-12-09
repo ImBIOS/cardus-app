@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "dev": "next dev",
+    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -60,6 +60,7 @@
     "@types/react-dom": "^18.0.8",
     "autoprefixer": "^10.4.13",
     "babel-loader": "^8.3.0",
+    "cross-env": "^7.0.3",
     "cypress": "^11.0.0",
     "cypress-social-logins": "^1.14.0",
     "eslint": "^8.29.0",
