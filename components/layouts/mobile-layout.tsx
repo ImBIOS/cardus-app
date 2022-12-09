@@ -1,6 +1,6 @@
-import PromptScreen from "components/screen/prompt/prompt-screen";
-import BottomNav from "components/ui/nav/bottom-nav";
-import TopNav from "components/ui/nav/top-nav";
+import BottomNav from "components/nav/bottom-nav";
+import TopNav from "components/nav/top-nav";
+import PromptScreen from "components/screens/prompt/prompt-screen";
 import { useAtom } from "jotai";
 import { isLoadingAtom, isMobileAtom } from "lib/atoms";
 import { useSession } from "next-auth/react";

@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import Button from "components/ui/button";
-import InputField from "components/ui/form/input-field";
-import AddImage from "components/ui/image/add-image";
-import ImagePreview from "components/ui/image/image-preview";
+import Button from "components/button";
+import InputField from "components/form/input-field";
+import AddImage from "components/image/add-image";
+import ImagePreview from "components/image/image-preview";
 import { useAtom } from "jotai";
 import {
   bottomNavAtom,

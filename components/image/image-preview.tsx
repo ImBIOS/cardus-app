@@ -1,6 +1,6 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
-import Modal from "components/ui/modal";
+import Modal from "components/modal";
 import { useAtom } from "jotai";
 import { IImageAtom, imageAtom } from "lib/atoms";
 import Image from "next/image";

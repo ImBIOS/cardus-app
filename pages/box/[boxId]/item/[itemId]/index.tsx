@@ -1,6 +1,6 @@
-import MobileLayout from "components/layout/mobile-layout";
-import PromptScreen from "components/screen/prompt/prompt-screen";
-import ImagePreview from "components/ui/image/image-preview";
+import ImagePreview from "components/image/image-preview";
+import MobileLayout from "components/layouts/mobile-layout";
+import PromptScreen from "components/screens/prompt/prompt-screen";
 import { useAtom } from "jotai";
 import { boxIdAtom } from "lib/atoms";
 import fetcher from "lib/fetcher";

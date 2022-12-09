@@ -1,4 +1,5 @@
-# Ignore artifacts:
+.yarn
 .next
 public
 node_modules
+!.storybook

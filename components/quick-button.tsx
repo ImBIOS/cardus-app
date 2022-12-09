@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import { isHideCreateBoxAtom } from "lib/atoms";
 
 const QuickButton = () => {
-  const [_, setIsHideCreateBox] = useAtom(isHideCreateBoxAtom);
+  const [_ishideCreateBox, setIsHideCreateBox] = useAtom(isHideCreateBoxAtom);
 
   const handleOnClick = () => setIsHideCreateBox(false);
 
