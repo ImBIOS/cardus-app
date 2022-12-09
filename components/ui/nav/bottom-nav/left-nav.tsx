@@ -15,7 +15,7 @@ const LeftNav = () => {
   const router = useRouter();
 
   const [boxId] = useAtom(boxIdAtom);
-  const [_, setIsLoading] = useAtom(isLoadingAtom);
+  const [_isLoading, setIsLoading] = useAtom(isLoadingAtom);
   const [{ currentScreen, midButtonAction }] = useAtom(bottomNavAtom);
 
   const randomTooltipText = () => {

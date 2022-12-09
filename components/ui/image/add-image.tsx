@@ -10,7 +10,7 @@ type Props = {
 };
 
 const AddImage = ({ className }: Props) => {
-  const [_, setIsWaitingUpload] = useAtom(isWaitingUploadAtom);
+  const [_isWaitingUpload, setIsWaitingUpload] = useAtom(isWaitingUploadAtom);
   const [imageState, setImageState] = useAtom(imageAtom);
 
   /** Index to access imageState Map */
