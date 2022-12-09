@@ -1,5 +1,5 @@
 import { PencilSquareIcon, QrCodeIcon } from "@heroicons/react/24/solid";
-import AddImage from "components/ui/image/add-image";
+import AddImage from "components/image/add-image";
 import { useAtom } from "jotai";
 import { bottomNavAtom, boxIdAtom, midBottomNavAtom } from "lib/atoms";
 import Link from "next/link";

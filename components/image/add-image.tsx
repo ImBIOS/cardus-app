@@ -109,7 +109,7 @@ const AddImage = ({ className }: Props) => {
                         updateImageState("progress", progress);
                       },
                     })
-                    .then((res) => {
+                    .then(() => {
                       updateImageState("status", "uploaded");
                       updateImageState("url", publicUrl);
                     })

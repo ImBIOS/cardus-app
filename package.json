@@ -11,8 +11,8 @@
     "lost-pixel": "lost-pixel",
     "lost-pixel:update": "lost-pixel update",
     "fmt": "prisma format && prettier --write .",
-    "sb": "start-storybook -p 6006 -s ./public",
-    "build-storybook": "BUILD_TOOL=swc build-storybook -s public"
+    "sb": "start-storybook -p 6006",
+    "build-sb": "BUILD_TOOL=swc build-storybook"
   },
   "dependencies": {
     "@google-cloud/storage": "^6.7.0",
@@ -37,7 +37,6 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "7.39.3",
     "react-to-print": "2.14.10",
-    "storybook-dark-mode": "^2.0.4",
     "swr": "^1.3.0",
     "zod": "3.19.1"
   },
@@ -66,9 +65,10 @@
     "eslint": "^8.29.0",
     "eslint-config-next": "^13.0.6",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-cypress": "2.12.1",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-plugin-storybook": "^0.6.8",
     "husky": "^8.0.2",
     "postcss": "^8.4.18",
     "prettier": "2.7.1",
@@ -76,6 +76,7 @@
     "prisma": "4.6.1",
     "storybook-addon-next": "^1.7.1",
     "storybook-addon-swc": "^1.1.9",
+    "storybook-dark-mode": "^2.0.4",
     "tailwindcss": "^3.2.2",
     "typescript": "4.9.3"
   },
@@ -83,5 +84,8 @@
     "node": ">=16.13.0",
     "yarn": ">=1.22.17",
     "npm": "please-use-yarn"
+  },
+  "resolutions": {
+    "webpack": "^5"
   }
 }

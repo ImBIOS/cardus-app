@@ -1,6 +1,6 @@
-import MobileLayout from "components/layout/mobile-layout";
-import Modal from "components/ui/modal";
-import ThemeSwitch from "components/ui/theme-switch";
+import MobileLayout from "components/layouts/mobile-layout";
+import Modal from "components/modal";
+import ThemeSwitch from "components/theme-switch";
 import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 

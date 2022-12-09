@@ -4,7 +4,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import axios from "axios";
-import Tooltip from "components/ui/tooltip";
+import Tooltip from "components/tooltip";
 import { useAtom } from "jotai";
 import { bottomNavAtom, boxIdAtom, isLoadingAtom } from "lib/atoms";
 import Link from "next/link";

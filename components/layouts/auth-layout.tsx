@@ -1,7 +1,6 @@
-import OnboardingScreen from "components/screen/onboarding";
-import PromptScreen from "components/screen/prompt/prompt-screen";
-import BottomNav from "components/ui/nav/bottom-nav";
-import TopNav from "components/ui/nav/top-nav";
+import TopNav from "components/nav/top-nav";
+import OnboardingScreen from "components/screens/onboarding";
+import PromptScreen from "components/screens/prompt/prompt-screen";
 import Head from "next/head";
 import { ReactNode, useEffect, useState } from "react";
 

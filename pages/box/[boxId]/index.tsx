@@ -1,8 +1,8 @@
-import MobileLayout from "components/layout/mobile-layout";
-import PromptScreen from "components/screen/prompt/prompt-screen";
-import Button from "components/ui/button";
-import BoxDisclosure from "components/ui/disclosure/box-disclosure";
-import ItemPreview from "components/ui/item-preview";
+import Button from "components/button";
+import BoxDisclosure from "components/disclosure/box-disclosure";
+import ItemPreview from "components/item-preview";
+import MobileLayout from "components/layouts/mobile-layout";
+import PromptScreen from "components/screens/prompt/prompt-screen";
 import { useAtom } from "jotai";
 import { boxIdAtom } from "lib/atoms";
 import fetcher from "lib/fetcher";

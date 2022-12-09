@@ -3,8 +3,8 @@ import {
   QuestionMarkCircleIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/solid";
-import ComponentToPrint from "components/ui/component-to-print";
-import Tooltip from "components/ui/tooltip";
+import ComponentToPrint from "components/component-to-print";
+import Tooltip from "components/tooltip";
 import { useAtom } from "jotai";
 import { bottomNavAtom, boxIdAtom, componentToPrintAtom } from "lib/atoms";
 import useImagePlaceholder from "lib/hooks/use-image-placeholder";

@@ -1,5 +1,5 @@
-import MobileLayout from "components/layout/mobile-layout";
-import QrReader from "components/ui/qr-reader";
+import MobileLayout from "components/layouts/mobile-layout";
+import QrReader from "components/qr-reader";
 
 const Scan = () => {
   return (

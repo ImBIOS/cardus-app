@@ -30,7 +30,7 @@ const nextConfig = withPWA({
     ],
   },
   experimental: {
-    // Required:
+    // Test appDir
     appDir: true,
   },
 });
