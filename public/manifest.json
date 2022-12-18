@@ -1,7 +1,7 @@
 {
   "name": "Cardus App Lite",
   "short_name": "Cardus",
-  "description": "Elegant storage technology establishment system",
+  "description": "Personal warehouse management app",
   "background_color": "#000000",
   "dir": "ltr",
   "display": "standalone",
@@ -49,15 +49,21 @@
       "purpose": "maskable"
     },
     {
-      "src": "icons/maskable_icon.png",
+      "src": "icons/maskable_icon_x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/monochrome.png",
-      "sizes": "512x512",
+      "src": "icons/maskable_icon.png",
+      "sizes": "1024x1024",
       "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "cardus.svg",
+      "sizes": "374x374 any",
+      "type": "image/svg+xml",
       "purpose": "monochrome"
     }
   ],

@@ -24,6 +24,7 @@ const ItemId = () => {
     setBoxIdState(boxId);
   }, [boxId, setBoxIdState]);
 
+  // Set QR code
   useEffect(() => {
     if (boxId) {
       const fullURL = router.basePath + router.asPath;
