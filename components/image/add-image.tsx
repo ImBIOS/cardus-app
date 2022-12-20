@@ -14,20 +14,20 @@ const AddImage = ({ className }: Props) => {
   const [imageState, setImageState] = useAtom(imageAtom);
 
   /** Index to access imageState Map */
-  const imageIndex = imageState.size;
+  const imageStateSize = imageState.size;
 
   const updateImageState = useCallback(
     (key: string, value: number | string) => {
       setImageState((prev) => {
         const newMap = new Map(prev);
-        newMap.set(imageIndex, {
-          ...newMap.get(imageIndex),
+        newMap.set(imageStateSize, {
+          ...newMap.get(imageStateSize),
           [key]: value,
         });
         return newMap;
       });
     },
-    [imageIndex, setImageState]
+    [imageStateSize, setImageState]
   );
 
   const uploadImage = useCallback(
@@ -37,7 +37,7 @@ const AddImage = ({ className }: Props) => {
           const file: File = fileList[i];
 
           // Initialize image state
-          imageState.set(imageIndex, {
+          imageState.set(imageStateSize, {
             status: "running",
             url: "",
             progress: 0,
@@ -128,7 +128,7 @@ const AddImage = ({ className }: Props) => {
         }
       }
     },
-    [imageState, imageIndex, updateImageState]
+    [imageState, imageStateSize, updateImageState]
   );
 
   const handleOnDrop = useCallback(

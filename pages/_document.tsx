@@ -17,12 +17,11 @@ class CustomDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="icon" href="/favicon.ico" />
           <meta name="robots" content="noindex,nofollow" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
           <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-          <link rel="apple-touch-icon" href="/estes.svg" />
+          <link rel="apple-touch-icon" href="/cardus.svg" />
           <meta name="theme-color" content="#000" />
         </Head>
         <body>
