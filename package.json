@@ -12,7 +12,8 @@
     "lost-pixel:update": "lost-pixel update",
     "fmt": "prisma format && prettier --write .",
     "sb": "start-storybook -p 6006",
-    "build-sb": "BUILD_TOOL=swc build-storybook"
+    "build-sb": "BUILD_TOOL=swc build-storybook",
+    "prepush": "vercel build"
   },
   "dependencies": {
     "@google-cloud/storage": "^6.7.0",
