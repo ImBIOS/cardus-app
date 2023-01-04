@@ -1,6 +1,6 @@
 import Button from "components/button";
 import BoxDisclosure from "components/disclosure/box-disclosure";
-import ItemPreview from "components/item-preview";
+import ItemPreview, { IItemPreview } from "components/item-preview";
 import MobileLayout from "components/layouts/mobile-layout";
 import PromptScreen from "components/screens/prompt/prompt-screen";
 import { useAtom } from "jotai";
@@ -41,7 +41,7 @@ const Box: React.FC = () => {
 
         {/* <!-- Items --> */}
         {box?.items.length > 0 ? (
-          box.items.map((item: any) => (
+          box.items.map((item: IItemPreview) => (
             <ItemPreview key={item.id} item={item} />
           ))
         ) : (

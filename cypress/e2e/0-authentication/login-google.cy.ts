@@ -49,7 +49,7 @@ describe("Google Login", () => {
 
     return cy
       .task("GoogleSocialLogin", socialLoginOptions)
-      .then(({ cookies }: any) => {
+      .then(({ cookies }: object) => {
         cy.clearCookies();
 
         const cookie = cookies

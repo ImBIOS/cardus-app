@@ -89,8 +89,8 @@ const AddImage = ({ className }: Props) => {
                   const formData = new FormData();
 
                   Object.entries({ ...fields, file: result }).forEach(
-                    ([key, value]: any[]) => {
-                      formData.append(key, value);
+                    ([key, value]: [string, string | Blob | unknown]) => {
+                      formData.append(key, value as string | Blob);
                     }
                   );
 

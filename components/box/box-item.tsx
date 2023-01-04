@@ -1,17 +1,19 @@
 import Link from "next/link";
 import BoxItemImages from "./box-item-images";
 
+export interface IBoxItem {
+  id: string;
+  name: string;
+  location: string;
+  images: string[];
+}
+
 type Props = {
-  itemData: {
-    id: string;
-    name: string;
-    location: string;
-    images: string[];
-  };
+  box: IBoxItem;
 };
 
-const BoxItem = ({ itemData }: Props) => {
-  const { id, name, location, images } = itemData;
+const BoxItem = ({ box: box }: Props) => {
+  const { id, name, location, images } = box;
   return (
     <Link
       href={`/box/${id}`}

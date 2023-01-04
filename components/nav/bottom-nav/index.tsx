@@ -40,6 +40,11 @@ const BottomNav = ({ hide }: Props) => {
     getValues,
   } = useForm({ resolver: zodResolver(boxPatchSchema) });
 
+  // Log error
+  useEffect(() => {
+    console.error(errors);
+  }, [errors]);
+
   // Update nav global state
   useEffect(() => {
     const currentPath = router.pathname.split("/");

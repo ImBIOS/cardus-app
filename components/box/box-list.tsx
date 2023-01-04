@@ -1,7 +1,7 @@
 import fetcher from "lib/fetcher";
 import Link from "next/link";
 import useSWR from "swr";
-import BoxItem from "./box-item";
+import BoxItem, { IBoxItem } from "./box-item";
 
 const BoxList: React.FC = () => {
   const { data, error } = useSWR("/api/boxes", fetcher);
@@ -34,8 +34,8 @@ const BoxList: React.FC = () => {
 
   return (
     <section className="no-scrollbar mb-72 flex flex-row flex-wrap gap-2 overflow-y-clip">
-      {data.map((itemData: any, idx: number) => (
-        <BoxItem key={`storageItem-${idx}`} itemData={itemData} />
+      {data.map((box: IBoxItem, idx: number) => (
+        <BoxItem key={`storageItem-${idx}`} box={box} />
       ))}
     </section>
   );

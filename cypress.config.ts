@@ -1,5 +1,5 @@
 import { defineConfig } from "cypress";
-const { GoogleSocialLogin } = require("cypress-social-logins").plugins;
+import { plugins } from "cypress-social-logins";
 
 // Populate process.env with values from .env file
 require("dotenv").config();
@@ -9,9 +9,9 @@ export default defineConfig({
   e2e: {
     baseUrl: "http://localhost:3000",
     chromeWebSecurity: false,
-    setupNodeEvents(on, config) {
+    setupNodeEvents(on) {
       on("task", {
-        GoogleSocialLogin: GoogleSocialLogin,
+        GoogleSocialLogin: plugins.GoogleSocialLogin,
       });
     },
   },

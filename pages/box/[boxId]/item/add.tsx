@@ -15,10 +15,6 @@ import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-export interface IItems {
-  name: string;
-}
-
 type FormData = z.infer<typeof itemCreateSchema>;
 
 const AddStorage = () => {
