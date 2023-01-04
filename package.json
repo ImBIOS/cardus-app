@@ -88,5 +88,6 @@
   },
   "resolutions": {
     "webpack": "^5"
-  }
+  },
+  "packageManager": "yarn@3.3.1"
 }
