@@ -11,13 +11,11 @@ import useImagePlaceholder from "lib/hooks/use-image-placeholder";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import QRCode from "qrcode";
 import { useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 const RightNav = () => {
-  const router = useRouter();
   const imagePlaceholder = useImagePlaceholder();
   const { data: session } = useSession();
   const [boxId] = useAtom(boxIdAtom);
@@ -43,8 +41,7 @@ const RightNav = () => {
   const [qr, setQR] = useState("");
   useEffect(() => {
     if (boxId) {
-      const fullURL = router.basePath + router.asPath;
-      QRCode.toDataURL(fullURL)
+      QRCode.toDataURL(boxId)
         .then((url) => {
           setQR(url);
         })
@@ -52,7 +49,7 @@ const RightNav = () => {
           console.error(err);
         });
     }
-  }, [boxId, router.asPath, router.basePath]);
+  }, [boxId]);
 
   return (
     <>

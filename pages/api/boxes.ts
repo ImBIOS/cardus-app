@@ -30,16 +30,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       if (session) {
         const { count } = req.body;
 
-        const boxes = await db.box.createMany({
-          data: Array.from({ length: count }, (_, i) => {
-            return {
-              name: `Box ${i + 1}`,
-              images: [],
-              location: "",
-              userId: session.user.id,
-            };
-          }),
+        const data = Array.from({ length: count }, (_, i) => {
+          return {
+            name: `Box ${i + 1}`,
+            images: [],
+            location: "",
+            userId: session.user.id,
+          };
         });
+
+        // TODO: This is just a workaround for now. We need to find a way to optimize the performance of this.
+        const boxes = await db.$transaction(
+          data.map((box) => db.box.create({ data: box }))
+        );
 
         return res.status(200).json(boxes);
       }

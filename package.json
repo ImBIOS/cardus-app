@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "dev": "docker-compose up -d && cross-env NODE_OPTIONS='--inspect' next dev",
+    "dev": "docker-compose up -d && cross-env NODE_OPTIONS='--inspect' next dev && docker-compose down",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

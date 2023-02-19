@@ -1,12 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Button from "components/button";
+import ComponentToPrint, { IBulkQr } from "components/component-to-print";
 import InputField from "components/form/input-field";
 import AddImage from "components/image/add-image";
 import ImagePreview from "components/image/image-preview";
+import Modal from "components/modal";
 import { useAtom } from "jotai";
 import {
   bottomNavAtom,
+  componentToPrintAtom,
   createBoxModeAtom,
   imageAtom,
   isHideCreateBoxAtom,
@@ -15,8 +18,10 @@ import {
 } from "lib/atoms";
 import { boxPatchSchema } from "lib/validations/box/box-patch-schema";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import QRCode from "qrcode";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useReactToPrint } from "react-to-print";
 import { z } from "zod";
 import LeftNav from "./left-nav";
 import MiddleNav from "./middle-nav";
@@ -30,11 +35,14 @@ type Props = {
 
 const BottomNav = ({ hide }: Props) => {
   const router = useRouter();
+  const [qr, setQR] = useState<IBulkQr[]>([]);
+
   const [isWaitingUpload] = useAtom(isWaitingUploadAtom);
   const [{ currentScreen }, setNav] = useAtom(bottomNavAtom);
   const [isHideCreateBox, setIsHideCreateBox] = useAtom(isHideCreateBoxAtom);
   const [attachmentState, setAttachmentState] = useAtom(imageAtom);
   const [createBoxMode] = useAtom(createBoxModeAtom);
+  const [componentToPrint] = useAtom(componentToPrintAtom);
 
   const {
     register,
@@ -46,6 +54,18 @@ const BottomNav = ({ hide }: Props) => {
   useEffect(() => {
     console.error(errors);
   }, [errors]);
+
+  // Modal
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => setIsOpen(true);
+  const onCancel = () => setIsOpen(false);
+  const onAccept = useReactToPrint({
+    content: () => componentToPrint.current as HTMLDivElement,
+    onAfterPrint: () => {
+      setQR([]);
+      router.reload();
+    },
+  });
 
   // Update nav global state
   useEffect(() => {
@@ -91,11 +111,22 @@ const BottomNav = ({ hide }: Props) => {
       }
     } else {
       const res = await axios.post("/api/boxes", { ...values });
-      const record = res.data;
+      const record = res.data as any[];
 
       if (record) {
         setIsHideCreateBox(true);
-        router.reload();
+
+        await record.reduce(async (prev, curr, idx) => {
+          await prev;
+          const base64 = await QRCode.toDataURL(curr.id);
+          setQR((prev) => [...prev, { name: curr.name, base64 }]);
+
+          if (idx === record.length - 1) {
+            // setPrompt to
+          }
+        }, Promise.resolve());
+
+        openModal();
       }
     }
   };
@@ -136,6 +167,7 @@ const BottomNav = ({ hide }: Props) => {
                 placeholder="Box Name"
                 autoComplete="off"
                 className="mb-2"
+                autoFocus
               />
               <InputField
                 register={register}
@@ -160,6 +192,7 @@ const BottomNav = ({ hide }: Props) => {
                 autoComplete="off"
                 className="mb-2"
                 type="number"
+                autoFocus
               />
               {errors.count && (
                 <p className="text-black dark:text-gray-200">
@@ -183,6 +216,21 @@ const BottomNav = ({ hide }: Props) => {
             </Button>
           </div>
         </section>
+      )}
+
+      <Modal
+        isOpen={isOpen}
+        title="Print QR Codes"
+        description="QR Codes are ready to be printed. You can print them now or later."
+        acceptText="Print Now"
+        onCancel={onCancel}
+        onAccept={onAccept}
+      />
+
+      {qr && (
+        <div className="hidden">
+          <ComponentToPrint qr={qr} />
+        </div>
       )}
     </section>
   );
