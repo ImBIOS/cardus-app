@@ -3,12 +3,13 @@ import { withMethods } from "lib/api-middlewares/with-methods";
 import db from "lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
+import { z } from "zod";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getSession({ req });
+
   if (req.method === "GET") {
     try {
-      const session = await getSession({ req });
-
       if (session?.user.id) {
         const boxes = await db.box.findMany({
           where: {
@@ -24,7 +25,32 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     } catch (error) {
       return res.status(500).end();
     }
+  } else if (req.method === "POST") {
+    try {
+      if (session) {
+        const { count } = req.body;
+
+        const boxes = await db.box.createMany({
+          data: Array.from({ length: count }, (_, i) => {
+            return {
+              name: `Box ${i + 1}`,
+              images: [],
+              location: "",
+              userId: session.user.id,
+            };
+          }),
+        });
+
+        return res.status(200).json(boxes);
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(422).json(error.issues);
+      }
+
+      return res.status(500).end();
+    }
   }
 }
 
-export default withMethods(["GET"], withAuthentication(handler));
+export default withMethods(["GET", "POST"], withAuthentication(handler));

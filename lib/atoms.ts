@@ -45,6 +45,7 @@ export const isMobileAtom = atom(false);
 
 // String Atoms
 export const boxIdAtom = atom("");
+export const createBoxModeAtom = atom("single");
 
 // RefObject Atoms
 export const componentToPrintAtom = atom<RefObject<HTMLDivElement>>({

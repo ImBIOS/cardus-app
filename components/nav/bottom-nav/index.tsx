@@ -7,6 +7,7 @@ import ImagePreview from "components/image/image-preview";
 import { useAtom } from "jotai";
 import {
   bottomNavAtom,
+  createBoxModeAtom,
   imageAtom,
   isHideCreateBoxAtom,
   isWaitingUploadAtom,
@@ -33,10 +34,11 @@ const BottomNav = ({ hide }: Props) => {
   const [{ currentScreen }, setNav] = useAtom(bottomNavAtom);
   const [isHideCreateBox, setIsHideCreateBox] = useAtom(isHideCreateBoxAtom);
   const [attachmentState, setAttachmentState] = useAtom(imageAtom);
+  const [createBoxMode] = useAtom(createBoxModeAtom);
 
   const {
     register,
-    formState: { errors },
+    formState: { isValid, errors },
     getValues,
   } = useForm({ resolver: zodResolver(boxPatchSchema) });
 
@@ -70,21 +72,31 @@ const BottomNav = ({ hide }: Props) => {
   }, [currentScreen, router.pathname, setNav]);
 
   const submitBox = async (values: FormData) => {
-    // Get url and fileName from attachmentState
-    const images: string[] = [];
-    for (const value of attachmentState.values()) {
-      images.push(value?.url as string);
-    }
+    if (createBoxMode === "single") {
+      // Get url and fileName from attachmentState
+      const images: string[] = [];
+      for (const value of attachmentState.values()) {
+        images.push(value?.url as string);
+      }
 
-    const res = await axios.post("/api/box", { ...values, images });
-    const record = res.data;
+      const res = await axios.post("/api/box", { ...values, images });
+      const record = res.data;
 
-    if (record) {
-      // Clear the attachmentState when new box created
-      setAttachmentState(new Map());
+      if (record) {
+        // Clear the attachmentState when new box created
+        setAttachmentState(new Map());
 
-      setIsHideCreateBox(true);
-      router.replace(`/box/${record.id}`);
+        setIsHideCreateBox(true);
+        router.replace(`/box/${record.id}`);
+      }
+    } else {
+      const res = await axios.post("/api/boxes", { ...values });
+      const record = res.data;
+
+      if (record) {
+        setIsHideCreateBox(true);
+        router.reload();
+      }
     }
   };
 
@@ -95,7 +107,16 @@ const BottomNav = ({ hide }: Props) => {
     <section
       className={`fixed bottom-0 flex w-full items-center justify-around rounded-t-[50px] border-t border-gray-800 bg-neutral-800 bg-opacity-30 backdrop-blur-lg backdrop-filter transition-all duration-300 ${
         hide && "hidden"
-      } ${isHideCreateBox ? "h-24" : "h-[30rem]"}`}
+      } ${
+        // If create box is hidden, show the default bottom nav
+        isHideCreateBox
+          ? "h-24"
+          : // If create box is visible and single
+          createBoxMode === "single"
+          ? "h-[30rem]"
+          : // If create box is visible and bulk
+            "h-80"
+      }`}
     >
       {isHideCreateBox ? (
         <>
@@ -105,29 +126,56 @@ const BottomNav = ({ hide }: Props) => {
         </>
       ) : (
         <section className="flex h-full w-screen flex-col justify-between px-8 py-10">
-          <div>
-            <InputField
-              register={register}
-              id="name"
-              flavour="title"
-              placeholder="Box Name"
-              autoComplete="off"
-              className="mb-2"
-            />
-            <InputField
-              register={register}
-              id="location"
-              flavour="subtitle"
-              placeholder="Location"
-              autoComplete="off"
-            />
-            <div className="my-8 flex items-center gap-4">
-              <AddImage className="relative h-16 w-16 rounded-full bg-blue-400 p-3" />
-              <ImagePreview className="-mr-48 w-3/4" />
+          {createBoxMode === "single" ? (
+            <div>
+              {/* Create Single Box */}
+              <InputField
+                register={register}
+                id="name"
+                flavour="title"
+                placeholder="Box Name"
+                autoComplete="off"
+                className="mb-2"
+              />
+              <InputField
+                register={register}
+                id="location"
+                flavour="subtitle"
+                placeholder="Location"
+                autoComplete="off"
+              />
+              <div className="my-8 flex items-center gap-4">
+                <AddImage className="relative h-16 w-16 rounded-full bg-blue-400 p-3" />
+                <ImagePreview className="-mr-48 w-3/4" />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div>
+              {/* Create Bulk Box */}
+              <InputField
+                register={register}
+                id="count"
+                flavour="title"
+                placeholder="Box Count"
+                autoComplete="off"
+                className="mb-2"
+                type="number"
+              />
+              {errors.count && (
+                <p className="text-black dark:text-gray-200">
+                  {errors.count.message as string}
+                </p>
+              )}
+              <p className="text-black dark:text-gray-200">
+                You will be able to add more details after creating the boxes.
+              </p>
+            </div>
+          )}
           <div className="flex flex-col gap-4">
-            <Button disabled={isWaitingUpload} onClick={handleCreate}>
+            <Button
+              disabled={isWaitingUpload || !isValid}
+              onClick={handleCreate}
+            >
               Create
             </Button>
             <Button flavour="secondary" onClick={handleCancel}>

@@ -1,5 +1,5 @@
 import {
-  PrinterIcon,
+  QrCodeIcon,
   QuestionMarkCircleIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/solid";
@@ -81,7 +81,7 @@ const RightNav = () => {
       )}
       {midButtonAction === "edit" && (
         <>
-          <PrinterIcon className="h-10 w-10" onClick={handleComponentPrint} />
+          <QrCodeIcon className="h-10 w-10" onClick={handleComponentPrint} />
           {qr && (
             <div className="hidden">
               <ComponentToPrint qr={qr} />

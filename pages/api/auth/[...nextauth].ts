@@ -14,6 +14,9 @@ export default NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_ID as string,
       clientSecret: process.env.GOOGLE_SECRET as string,
+      httpOptions: {
+        timeout: process.env.NODE_ENV === "development" ? 40000 : 3500,
+      },
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_ID as string,

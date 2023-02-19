@@ -7,9 +7,9 @@ const Home = () => {
     <MobileLayout>
       {/* ALPHA */}
       {/* <SearchCardus /> */}
-      <div className="mx-4 my-2">
+      <section className="mx-4 my-2">
         <BoxList />
-      </div>
+      </section>
       <QuickButton />
     </MobileLayout>
   );

@@ -39,7 +39,7 @@ model Item {
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @map("user_id")
+  userId            String  @map("user_id") @db.ObjectId
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
