@@ -44,6 +44,12 @@ This is the Trusted Web Activity for the CardusApp project. It is a webapp that 
   - [x] Create Storybook
   - [ ] Deploy Storybook
 
+## 📜 To-Do
+
+- [ ] Migrate `pagesDir` to `appDir`
+- [ ] Migrate to `PNPM` and `turborepo`
+- [ ] Research `tensorflow` and `Google Vision API`
+
 ## 🛠 Develop Locally
 
 ### 📄 Prerequisites
