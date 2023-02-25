@@ -27,8 +27,7 @@ const ItemId = () => {
   // Set QR code
   useEffect(() => {
     if (boxId) {
-      const fullURL = router.basePath + router.asPath;
-      QRCode.toDataURL(fullURL)
+      QRCode.toDataURL(boxId)
         .then((url) => {
           setQR(url);
         })
@@ -36,7 +35,7 @@ const ItemId = () => {
           console.error(err);
         });
     }
-  }, [boxId, router.asPath, router.basePath]);
+  }, [boxId]);
 
   const { data, error } = useSWR(boxId ? `/api/box/${boxId}` : null, fetcher);
 
