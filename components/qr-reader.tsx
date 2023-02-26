@@ -16,7 +16,7 @@ const QrReader = ({ ...props }: Prop) => {
       (result) => router.push(`/box/${result.data}`),
       {
         onDecodeError: (error) => {
-          console.info(error);
+          console.error(error);
         },
         returnDetailedScanResult: true,
         highlightScanRegion: true,

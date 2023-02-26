@@ -11,14 +11,15 @@ datasource db {
 }
 
 model Box {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
   name      String
   items     Item[]
   location  String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String   @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String    @map("user_id") @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
   images    String[]
 
   @@map("boxes")
@@ -26,12 +27,12 @@ model Box {
 
 model Item {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   name      String
   keywords  String[]
   box       Box      @relation(fields: [boxId], references: [id], onDelete: Cascade)
-  boxId     String   @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
+  boxId     String   @map("box_id") @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
   images    String[]
 
   @@map("items")
@@ -86,5 +87,5 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-  @@map("verificationtokens")
+  @@map("verification_tokens")
 }

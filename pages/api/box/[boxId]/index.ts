@@ -1,7 +1,6 @@
 import { withAuthentication } from "lib/api-middlewares/with-authentication";
 import { withMethods } from "lib/api-middlewares/with-methods";
 import db from "lib/db";
-import storage from "lib/storage";
 import { boxPatchSchema } from "lib/validations/box/box-patch-schema";
 import { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
@@ -57,16 +56,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       if (!box) return res.status(404).end();
 
-      box.images.forEach(async (file) => {
-        const bucket = storage.bucket(process.env.BUCKET_NAME as string);
-        const fileToDelete = bucket.file(file);
+      // box.images.forEach(async (file) => {
+      //   const bucket = storage.bucket(process.env.BUCKET_NAME as string);
+      //   const fileToDelete = bucket.file(file);
 
-        await fileToDelete.delete();
-      });
+      //   // await fileToDelete.delete(); // comment this to enable soft-delete
+      // });
 
-      const deletedBox = await db.box.delete({
+      const deletedBox = await db.box.update({
         where: {
           id: boxId as string,
+        },
+        data: {
+          deletedAt: new Date(),
+          // images: [], // comment this to enable soft-delete
         },
       });
 

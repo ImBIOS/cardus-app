@@ -14,6 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         const boxes = await db.box.findMany({
           where: {
             userId: session.user.id,
+            deletedAt: null,
           },
           include: {
             items: true,
