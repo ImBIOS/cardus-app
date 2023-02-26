@@ -13,7 +13,7 @@ const QrReader = ({ ...props }: Prop) => {
   useEffect(() => {
     let scanner: QrScanner | null = new QrScanner(
       videoElem.current as HTMLVideoElement,
-      (result) => router.push(`/box/${String(result)}`),
+      (result) => router.push(`/box/${result.data}`),
       {
         onDecodeError: (error) => {
           console.info(error);
