@@ -15,7 +15,7 @@ const EditBox = () => {
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
 
-  return <MobileLayout>{data.name}</MobileLayout>;
+  return <MobileLayout>{data?.name}</MobileLayout>;
 };
 
 export default EditBox;
