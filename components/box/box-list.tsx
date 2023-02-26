@@ -4,13 +4,13 @@ import useSWR from "swr";
 import BoxItem, { IBoxItem } from "./box-item";
 
 const BoxList: React.FC = () => {
-  const { data, error } = useSWR("/api/boxes", fetcher);
+  const { data, error, isLoading } = useSWR("/api/boxes", fetcher);
 
   if (error || !data || data?.length === 0)
     return (
       <section className="no-scrollbar mb-48 flex h-[36rem] flex-col flex-wrap items-center justify-center gap-2 overflow-y-clip text-center">
         {error && <>🥹 failed to load</>}
-        {!data && <>📦 Loading boxes...</>}
+        {isLoading && <>📦 Loading boxes...</>}
         {data?.length === 0 && (
           <>
             🤔 No box created yet.

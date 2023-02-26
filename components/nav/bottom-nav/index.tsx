@@ -63,7 +63,7 @@ const BottomNav = ({ hide }: Props) => {
     content: () => componentToPrint.current as HTMLDivElement,
     onAfterPrint: () => {
       setQR([]);
-      router.reload();
+      setIsOpen(false);
     },
   });
 
